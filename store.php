@@ -118,19 +118,18 @@
       echo "<td>&emsp;".$row['pName']."&emsp;</td>";
       echo "<td>&emsp;".$row['method']."&emsp;</td>";
       echo "<td>";
-      echo '<input type="submit" name="ISBN" value="add to cart">';
+      // echo '<input type="submit" name="ISBN" value="add to cart">';
+      echo '<button type="submit" name="ISBN" value="' .$row['ISBN']. '">add to cart</button>';
       echo '</td>';
       echo "</tr>";
       echo '</form>';
   }
-
   echo "</tbody></table>";
 
   // close database connection
   mysqli_free_result($result);
   mysqli_close($myconnection);
   ?>
-
   <!-- Go to Rating -->
   <br>
   <form class="" action="rating.php" method="post">

@@ -24,7 +24,9 @@
      }
 
      $mydb = new mysqli('localhost', 'root', '', 'bookstore');
-     $query = "SELECT * FROM `order` WHERE userID = ?;";
+     $query = "SELECT orderNumber, title, inOrder.ISBN, quantity, status, time
+               FROM inorder, `order`, books
+               WHERE orderNumber = Number AND userID = ? AND inorder.ISBN = books.ISBN;";
 
      $stmt = $mydb->prepare($query);
      $stmt->bind_param('i', $_SESSION['id']);
@@ -35,18 +37,24 @@
        <thead>
          <tr>
            <th>Number</th>
-           <th>Time</th>
+           <th>Title</th>
+           <th>ISBN</th>
+           <th>Quantity</th>
            <th>Status</th>
+           <th>Time</th>
          </tr>
        </thead>";
 
      // table body
      echo "<tbody>";
-     while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+     while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
          echo "<tr>";
-         echo "<td>&emsp;".$row['Number']."&emsp;</td>";
-         echo "<td>&emsp;".$row['time']."&emsp;</td>";
+         echo "<td>&emsp;".$row['orderNumber']."&emsp;</td>";
+         echo "<td>&emsp;".$row['title']."&emsp;</td>";
+         echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
+         echo "<td>&emsp;".$row['quantity']."&emsp;</td>";
          echo "<td>&emsp;".$row['status']."&emsp;</td>";
+         echo "<td>&emsp;".$row['time']."&emsp;</td>";
          echo "</tr>";
      }
 
