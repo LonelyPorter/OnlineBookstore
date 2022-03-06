@@ -48,36 +48,66 @@
       $id = $_SESSION['id'];
 
       // check if there's exsisting shopping cart
-      $query = "SELECT Number FROM `order`
-                WHERE status='pending' AND userID=?;";
+      $query = "SELECT ID, orderNumber FROM ShoppingCart WHERE userID = ?;";
       $stmt = $mydb->prepare($query);
       $stmt->bind_param('i', $_SESSION['id']);
       $stmt->execute();
-      $stmt->bind_result($order);
+      $stmt->bind_result($cartID, $order);
       $stmt->fetch();
       $stmt->close();
 
-      // insert order
-      $query = "INSERT into `order`(Number, time, status, userID)
-                VALUES(?, ?, 'pending', ?);";
-      $stmt = $mydb->prepare($query);
-      $stmt->bind_param('ssi', $order, $time, $id);
-      $stmt->execute();
+      /* Start transaction */
+      $mydb->begin_transaction();
 
-      // insert shopping cart
-      $query = "INSERT into `shoppingcart`(orderNumber, userID)
-                VALUES(?, ?);";
-      $stmt = $mydb->prepare($query);
-      $stmt->bind_param('si', $order, $id);
-      $stmt->execute();
+      try {
+        // insert order
+        $query = "INSERT into `order`(Number, time, status, userID)
+                  VALUES(?, ?, 'pending', ?);";
+        $stmt = $mydb->prepare($query);
+        $stmt->bind_param('ssi', $order, $time, $id);
+        $stmt->execute();
 
-      // insert incart
-      $last_id = mysqli_insert_id($mydb);
-      $query = "INSERT INTO `InCart` (`ISBN`, `cartID`, `cartOrder`, `quantity`)
-                VALUES (?, ?, ?, 1);";
-      $stmt = $mydb->prepare($query);
-      $stmt->bind_param('sis', $isbn, $last_id, $order);
-      $stmt->execute();
+        // insert shopping cart
+        $query = "INSERT into `shoppingcart`(orderNumber, userID)
+                  VALUES(?, ?);";
+        $stmt = $mydb->prepare($query);
+        $stmt->bind_param('si', $order, $id);
+        $stmt->execute();
+
+        // insert incart
+        $last_id = mysqli_insert_id($mydb);
+        $query = "INSERT INTO `InCart` (`ISBN`, `cartID`, `cartOrder`, `quantity`)
+                  VALUES (?, ?, ?, 1);";
+        $stmt = $mydb->prepare($query);
+        $stmt->bind_param('sis', $isbn, $last_id, $order);
+        $stmt->execute();
+
+        /* If code reaches this point without errors then commit the data in the database */
+        $mydb->commit();
+      } catch (\Exception $e) { // if insert fail, meaning already have a shopping cart
+        $mydb->rollback();
+      }
+
+      try {
+        // insert incart
+        $query = "INSERT INTO `InCart` (`ISBN`, `cartID`, `cartOrder`, `quantity`)
+                  VALUES (?, ?, ?, 1);";
+        $stmt = $mydb->prepare($query);
+        $stmt->bind_param('sis', $isbn, $cartID, $order);
+        $stmt->execute();
+
+        $mydb->commit();
+      } catch (\Exception $e) { // if insert fail, update quantity
+        $mydb->rollback();
+
+        $query = "UPDATE inCart SET quantity = quantity + 1
+                  WHERE ISBN = ? AND cartID = ? AND cartOrder = ?";
+        $stmt = $mydb->prepare($query);
+        $stmt->bind_param('sis', $isbn, $cartID, $order);
+        $stmt->execute();
+      }
+
+
     }
 
     // after hit purchase
