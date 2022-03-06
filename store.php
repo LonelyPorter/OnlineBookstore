@@ -59,24 +59,33 @@
   echo "<br><br>";
   ?>
 
-  <!-- To my order or shopping cart -->
-  <form action="order.php" method="post">
-    <button type="submit">My Order</button>
-  </form>
-
-  <form action="cart.php" method="post">
-    <button type="submit">My Shopping Cart</button>
-  </form>
+  <div style="display: flex;">
+    <!-- To my order -->
+    <form action="order.php" method="post">
+      <button type="submit">My Order</button>&nbsp;
+    </form>
+    <!-- To shopping cart -->
+    <form action="cart.php" method="post">
+      <button type="submit">My Shopping Cart</button>&nbsp;
+    </form>
+    <!-- To manage my member -->
+    <form action="prime.php" method="post">
+      <button type="submit">Prime</button>&nbsp;
+    </form>
+    <!-- To search books -->
+    <form action="search.php" method="post">
+      <button type="submit">Search</button>&nbsp;
+    </form>
 
   <?php
     // check for if it's superuser
     if($_SESSION['id'] == 1000) {
       echo '<form action="update.php" method="post">
-            <button type="submit">Update</button>
+            <button type="submit">Update</button>&nbsp;
             </form>';
     }
    ?>
-
+  </div>
   <br><br>
 
   <?php
