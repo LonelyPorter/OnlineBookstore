@@ -42,11 +42,20 @@
 
     // insert book into incart
     if (!empty($_POST['ISBN'])) {
-      // echo "add to cart now:".$_POST['ISBN'];
       $isbn = $_POST['ISBN'];
       $time = date("Y-m-d");
       $order = generateOrder();
       $id = $_SESSION['id'];
+
+      // check if there's exsisting shopping cart
+      $query = "SELECT Number FROM `order`
+                WHERE status='pending' AND userID=?;";
+      $stmt = $mydb->prepare($query);
+      $stmt->bind_param('i', $_SESSION['id']);
+      $stmt->execute();
+      $stmt->bind_result($order);
+      $stmt->fetch();
+      $stmt->close();
 
       // insert order
       $query = "INSERT into `order`(Number, time, status, userID)
@@ -141,7 +150,7 @@
     echo "</table>";
 
     // display Bought message
-    if(!empty($_POST['purchase']) && mysqli_num_rows($result) != 0) {
+    if(!empty($_POST['purchase']) && mysqli_num_rows($result) == 0) {
       echo "<h2>Bought!</h2>";
     }
 
