@@ -42,6 +42,7 @@
            <th>Quantity</th>
            <th>Status</th>
            <th>Time</th>
+           <th>Option</th>
          </tr>
        </thead>";
 
@@ -55,6 +56,9 @@
          echo "<td>&emsp;".$row['quantity']."&emsp;</td>";
          echo "<td>&emsp;".$row['status']."&emsp;</td>";
          echo "<td>&emsp;".$row['time']."&emsp;</td>";
+         echo '<td><form action="cart.php" method="post">
+                  <button type="submit" name="ISBN" value="'.$row['ISBN'].'">Reorder</button>
+               </form></td>';
          echo "</tr>";
      }
 
@@ -63,7 +67,7 @@
 
      $result->free();
      $mydb->close();
+    ?>
 
-      ?>
    </body>
  </html>

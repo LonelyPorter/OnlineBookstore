@@ -1,3 +1,4 @@
+<!-- Update delivery method price -->
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
