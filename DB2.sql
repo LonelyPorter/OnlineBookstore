@@ -115,7 +115,7 @@ INSERT INTO `Order` (`Number`, `time`, `status`, `userID`) VALUES
 
 create table Member (
   userID int primary key,
-  prime boolean,
+  prime boolean NOT NULL DEFAULT 0,
 
   constraint foreign key (userID) references Customers(userID)
 );
@@ -142,7 +142,7 @@ INSERT INTO `Guest` (`userID`) VALUES
 
 create table Author (
   userID int primary key,
-  prime boolean,
+  prime boolean NOT NULL DEFAULT 0,
 
   constraint foreign key (userID) references Customers(userID)
 );
