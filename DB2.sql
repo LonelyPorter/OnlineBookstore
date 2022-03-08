@@ -47,7 +47,7 @@ INSERT INTO Delivery (method, time, cost) VALUES
 ('paperback', 5, 4.99);
 
 create table Customers (
-  userID int primary key,
+  userID int NOT NULL AUTO_INCREMENT primary key,
   password varchar(20),
   name varchar(30),
   email varchar(40) unique,

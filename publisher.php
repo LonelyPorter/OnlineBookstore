@@ -4,17 +4,15 @@
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<style media="screen">
-  body{text-align: auto;}
-</style>
   <head>
     <meta charset="utf-8">
-    <title>My Book Store</title>
+    <title>Publisher Log In</title>
   </head>
 
-  <center><body>
-      <h1>Book Store</h1>
-      <form class="login" action="publisher1.php" method="post">
+  <center>
+    <body>
+      <h1>Publisher Log In</h1>
+      <form class="login" action="publisher_in.php" method="post">
         <!-- login field -->
         <div>
           <label>Name: </label>
@@ -22,12 +20,10 @@
         </div>
         <br>
 
-
         <?php
-          // check if user input is empty or not
+          // check if publisher exists
           // from: store.php
           if (isset($_SESSION['valid']) and !$_SESSION['valid']) {
-            // echo "Invalid email/passowrd. Please Try again.";
             echo $_SESSION['error'];
             echo '<br>';
             unset($_SESSION['valid']);
@@ -35,8 +31,9 @@
          ?>
 
          <!-- Login button -->
-        <input type="submit" name="login" value="Log In">
-        <input type="reset">&nbsp;&nbsp;
+         <button type="submit" name="button">Log In</button>
+         <button type="reset" name="button">reset</button>
       </form>
-  </body></center>
+  </body>
+</center>
 </html>
