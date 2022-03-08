@@ -21,6 +21,7 @@
   $stmt->execute();
   $result = $stmt->get_result();
 
+  // if name not exists
   if (mysqli_num_rows($result) == 0) {
     $_SESSION['valid'] = false;
     $_SESSION['error'] = "Invalid name. Please Try again.";
@@ -32,6 +33,8 @@
   echo '<h1>Welcome Publisher!</h1>';
   // Login in information
   echo "You are login as: $name";
+  // store for add book
+  $_SESSION['pName'] = $name;
 
   // close database connection
   $result->free();
@@ -39,10 +42,13 @@
   ?>
   <br><br>
 
+  <?php
+  echo '<form action="addbook.php" method="post">
+          <button type="submit" value="'.$name.'">Add Book</button>
+        </form>';
+  ?>
+
   <!-- To add book -->
-  <a href="addbook.php" style="text-decoration: none;">
-    <button type="button">Add Book</button>
-  </a>
   <p>*Only exsisting author can add book through the publisher</p>
   <br><br>
 

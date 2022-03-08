@@ -9,7 +9,7 @@
      Category: Travel
      in_stock: 6
   */
-
+  $name = $_SESSION['pName'];
  ?>
 
 <!DOCTYPE html>
@@ -22,6 +22,8 @@
   <br>
   <center>
     <h1>Adding Book</h1>
+
+    <!-- Information input -->
     <form class="form" action="" method="post">
       <input type="number" name="ISBN" placeholder="ISBN" required>*<br><br>
       <input type="text" name="title" placeholder="Title">*<br><br>
@@ -69,7 +71,8 @@
     </form>
   </center>
 
-<?php
+  <!-- Add book -->
+  <?php
      /* When form submitted, insert values into the database */
      if(!empty($_POST['submit'])) {
        /* assign variable */
@@ -88,15 +91,16 @@
        $in_stock = stripslashes($_POST['in_stock']);
        $in_stock = mysqli_real_escape_string($mydb, $in_stock);
        $author = $_POST['author'];
+       $method = $_POST['method'];
 
        /* Start transaction */
        $mydb->begin_transaction();
        try {
          // insert into books
-         $query = "INSERT INTO books(ISBN, title, type, price, Category, in_stock)
-         VALUES (?,?,?,?,?,?);";
+         $query = "INSERT INTO books(ISBN, title, type, price, Category, in_stock, pName, method)
+         VALUES (?,?,?,?,?,?,?,?);";
          $stmt = $mydb->prepare($query);
-         $stmt->bind_param('sssdsi', $ISBN, $title, $type, $price, $category, $in_stock);
+         $stmt->bind_param('sssdsiss', $ISBN, $title, $type, $price, $category, $in_stock, $name, $method);
          $stmt->execute();
 
          // insert into write
