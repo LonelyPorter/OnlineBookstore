@@ -22,184 +22,115 @@
        echo '<a href="store.php">store home</a>';
        echo "<br><br>";
      }
-    
-     $myconnection = mysqli_connect('localhost', 'root', '')
-      or die ('Could not connect: ' . mysql_error());
-     $mydb = mysqli_select_db ($myconnection, 'bookstore') or die ('Could not select database');
-     ?>
+    ?>
 
-    <form class="form" action="" method="post">
+    <!-- Search Field -->
+    <form class="" action="" method="post">
+      <!-- Title -->
       <label>Title: </label>
       <input type="text" name="title">
-      <label for="author">Author:</label>
-      <select name="author" id="author">
-        <optgroup label="Author Name">    
-          <option disabled selected value> -- Choose an Author -- </option>
-          <option value="Felix Daniel">Felix Daniel</option>
-          <option value="Rita Swanson">Rita Swanson</option>
-          <option value="Ernesto Robbins">Ernesto Robbins</option>
-          <option value="Jared Terry">Jared Terry</option>
-          <option value="Clara Farmer">Clara Farmer</option>
-        </optgroup>
-      </select>        
-      <input type="submit" name="submit" value="Search">
-      <input type="reset" value="Reset"><br><br>
+
+      <!-- Author -->
+      <label>Author: </label>
+      <?php
+        // begin connection
+        $mydb = new mysqli('localhost', 'root', '', 'bookstore');
+
+        $query = "SELECT author.userID, name FROM customers, author WHERE customers.userID = author.userID;";
+        $stmt = $mydb->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        echo '<select name="author">';
+        echo '<option disabled selected> -- Choose an Author -- </option>';
+        while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
+          // value = userID
+          echo '<option value="' . $row['userID'].'">'. $row['name'].'</option>';
+        }
+        echo '<option value="%">Any</option>';
+        echo '</select>';
+        $result->free();
+       ?>
+
+       <!-- Button -->
+       <input type="submit" name="submit" value="Search">
+       <input type="reset" value="Reset"><br><br>
     </form>
 
-
     <?php
-     if(!empty($_POST['title']) && empty($_POST['author'])) { 
-         $title = $_POST['title']; 
-         
-         $query = "SELECT * FROM books WHERE title LIKE '%".$title."%'";
-         $result = mysqli_query($myconnection, $query) or die ('Query failed: ' . mysql_error());
-         
-         echo "<br>";
-         echo "<table>
-         <thead>
-         <tr>
-         <th>ISBN</th>
-         <th>Title</th>
-         <th>Type</th>
-         <th>Price</th>
-         <th>Category</th>
-         <th>Stock</th>
-         <th>Publisher Name</th>
-         <th>Delivery Method</th>
-         </tr>
-         </thead>";
-         
-         // table body
-         echo "<tbody>";
-         while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-             echo "<tr>";
-             echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
-             echo "<td>&emsp;".$row['title']."&emsp;</td>";
-             echo "<td>&emsp;".$row['type']."&emsp;</td>";
-             echo "<td>&emsp;".$row['price']."&emsp;</td>";
-             echo "<td>&emsp;".$row['Category']."&emsp;</td>";
-             if ($row['in_stock'] >= 0) {
-                 echo "<td>&emsp;".$row['in_stock']."&emsp;</td>";
-                } else {
-                    echo "<td>&emsp;&infin;&emsp;</td>";
-                }
-                echo "<td>&emsp;".$row['pName']."&emsp;</td>";
-                echo "<td>&emsp;".$row['method']."&emsp;</td>";
-                echo "<td>";
-                echo '</td>';
-                echo "</tr>";
-                echo '</form>';
-            }
-            
-            echo "</tbody></table>";
 
-            // close database connection
-            mysqli_free_result($result);
-            mysqli_close($myconnection);
-        }elseif(empty($_POST['title']) && !empty($_POST['author'])) {
-            $author = $_POST['author'];
-            
-            $query ="SELECT distinct books.ISBN, books.title, books.type, books.price, books.Category, books.in_stock, books.pName, books.method, customers.name 
-            FROM books, `write`, customers where books.ISBN=`write`.ISBN and `write`.userID=customers.userID and customers.name LIKE '%".$author."%';";
-            $result = mysqli_query($myconnection, $query) or die ('Query failed: ' . mysql_error());
-            
-            echo "<br>";
-            echo "<table>
-            <thead>
-            <tr>
-            <th>ISBN</th>
-            <th>Title</th>
-            <th>Type</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th>Stock</th>
-            <th>Publisher Name</th>
-            <th>Delivery Method</th>
-            <th>Author Name</th>
-            </tr>
-            </thead>";
-            
-            // table body
-            echo "<tbody>";
-            while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                echo "<tr>";
-                echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
-                echo "<td>&emsp;".$row['title']."&emsp;</td>";
-                echo "<td>&emsp;".$row['type']."&emsp;</td>";
-                echo "<td>&emsp;".$row['price']."&emsp;</td>";
-                echo "<td>&emsp;".$row['Category']."&emsp;</td>";
-                if ($row['in_stock'] >= 0) {
-                    echo "<td>&emsp;".$row['in_stock']."&emsp;</td>";
-                } else {
-                    echo "<td>&emsp;&infin;&emsp;</td>";
-                }
-                echo "<td>&emsp;".$row['pName']."&emsp;</td>";
-                echo "<td>&emsp;".$row['method']."&emsp;</td>";
-                echo "<td>&emsp;".$row['name']."&emsp;</td>";
-                echo "<td>";
-                echo '</td>';
-                echo "</tr>";
-                echo '</form>';
-            }
-            
-            echo "</tbody></table>";
 
-            // close database connection
-            mysqli_free_result($result);
-            mysqli_close($myconnection);
-        }elseif(!empty($_POST['title']) && !empty($_POST['author'])) { 
-            $title = $_POST['title'];
-            $author = $_POST['author'];
-            
-            $query ="SELECT distinct books.ISBN, books.title, books.type, books.price, books.Category, books.in_stock, books.pName, books.method, customers.name 
-            FROM books, `write`, customers where (books.ISBN=`write`.ISBN and `write`.userID=customers.userID) and (books.title LIKE '%".$title."%' and customers.name LIKE '%".$author."%');";
-            $result = mysqli_query($myconnection, $query) or die ('Query failed: ' . mysql_error());
-            
-            echo "<br>";
-            echo "<table>
-            <thead>
-            <tr>
-            <th>ISBN</th>
-            <th>Title</th>
-            <th>Type</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th>Stock</th>
-            <th>Publisher Name</th>
-            <th>Delivery Method</th>
-            <th>Author Name</th>
-            </tr>
-            </thead>";
-            
-            // table body
-            echo "<tbody>";
-            while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                echo "<tr>";
-                echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
-                echo "<td>&emsp;".$row['title']."&emsp;</td>";
-                echo "<td>&emsp;".$row['type']."&emsp;</td>";
-                echo "<td>&emsp;".$row['price']."&emsp;</td>";
-                echo "<td>&emsp;".$row['Category']."&emsp;</td>";
-                if ($row['in_stock'] >= 0) {
-                    echo "<td>&emsp;".$row['in_stock']."&emsp;</td>";
-                } else {
-                    echo "<td>&emsp;&infin;&emsp;</td>";
-                }
-                echo "<td>&emsp;".$row['pName']."&emsp;</td>";
-                echo "<td>&emsp;".$row['method']."&emsp;</td>";
-                echo "<td>&emsp;".$row['name']."&emsp;</td>";
-                echo "<td>";
-                echo '</td>';
-                echo "</tr>";
-                echo '</form>';
-            }
-            
-            echo "</tbody></table>";
+      /* Initialize */
+      $title = "%";
+      $author = "%";
+      if(!empty($_POST['title'])) {
+        $title = '%'.$_POST['title'].'%';
+      }
+      if(!empty($_POST['author'])) {
+        $author = $_POST['author'];
+      }
 
-            // close database connection
-            mysqli_free_result($result);
-            mysqli_close($myconnection);
+      /* Search book by title/author query */
+      $query = "SELECT books.ISBN, title, type, price, Category, in_stock, pName, method, name
+                FROM books, `write`, customers
+                WHERE books.ISBN = `write`.ISBN AND customers.userID = `write`.userID
+                  AND title LIKE ? AND `write`.userID LIKE ?;";
+      $stmt = $mydb->prepare($query);
+      $stmt->bind_param('ss', $title, $author);
+      $stmt->execute();
+      $result = $stmt->get_result();
+
+      if(mysqli_num_rows($result) == 0) {
+        echo "<h3>No record can be found with search condition</h3>";
+      } else {
+        // table title
+        echo "<table>
+        <thead>
+        <tr>
+        <th>ISBN</th>
+        <th>Title</th>
+        <th>Type</th>
+        <th>Price</th>
+        <th>Category</th>
+        <th>Author</th>
+        <th>Stock</th>
+        <th>Publisher Name</th>
+        <th>Delivery Method</th>
+        <th>Option</th>
+        </tr>
+        </thead>";
+
+        // table body
+        echo "<tbody>";
+        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+          echo '<form action="cart.php" method="post">';
+          echo "<tr>";
+          echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
+          echo "<td>&emsp;".$row['title']."&emsp;</td>";
+          echo "<td>&emsp;".$row['type']."&emsp;</td>";
+          echo "<td>&emsp;".$row['price']."&emsp;</td>";
+          echo "<td>&emsp;".$row['Category']."&emsp;</td>";
+          echo "<td>&emsp;".$row['name']."&emsp;</td>";
+          if ($row['in_stock'] >= 0) {
+            echo "<td>&emsp;".$row['in_stock']."&emsp;</td>";
+          } else {
+            echo "<td>&emsp;&infin;&emsp;</td>";
+          }
+          echo "<td>&emsp;".$row['pName']."&emsp;</td>";
+          echo "<td>&emsp;".$row['method']."&emsp;</td>";
+          echo "<td>";
+          // echo '<input type="submit" name="ISBN" value="add to cart">';
+          echo '<button type="submit" name="ISBN" value="' .$row['ISBN']. '">add to cart</button>';
+          echo '</td>';
+          echo "</tr>";
+          echo '</form>';
         }
-    ?>
+        echo "</tbody></table>";
+      }
+
+      // close database connection
+      $result->free();
+      $mydb->close();
+     ?>
+
     </body>
 </html>
