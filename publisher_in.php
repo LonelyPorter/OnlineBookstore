@@ -13,6 +13,7 @@
   <?php
   // establish database connection
   $mydb = new mysqli('localhost', 'root', '', 'bookstore');
+
   $name = NULL;
   if(empty($_SESSION['pName'])) {
     if(!empty($_POST['name'])) {
@@ -20,6 +21,15 @@
     }
   } else {
     $name = $_SESSION['pName'];
+  }
+
+  // if address being changed
+  if(!empty($_POST['address'])) {
+    $query = "UPDATE publisher SET address = ? WHERE name = ?;";
+
+    $stmt = $mydb->prepare($query);
+    $stmt->bind_param('ss', $_POST['address'], $name);
+    $stmt->execute();
   }
 
   $query = "SELECT * FROM publisher WHERE name = ?;";
@@ -45,14 +55,6 @@
     $_SESSION['pName'] = $name;
 
   echo '<h3>Publisher Infomation</h3>';
-  if(isset($_POST['address'])) {
-    $query = "UPDATE publisher SET address = ".$_POST['address']." WHERE name = ?;";
-
-    $stmt = $mydb->prepare($query);
-    $stmt->bind_param('s', $name);
-    $stmt->execute();
-    $result = $stmt->get_result();
-  }
   // table title
   echo "<table>
     <thead>
