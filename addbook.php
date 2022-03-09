@@ -68,6 +68,7 @@
       <!-- <input type="tel" name="phone" placeholder="Phone"><br><br> -->
       <!-- <input type="text" name="address" placeholder="Address"><br><br> -->
       <input type="submit" name="submit" value="Finish" class="submit-button">
+      <a href="publisher_in.php">Back</a>
     </form>
   </center>
 
@@ -119,7 +120,6 @@
        echo "<center><h3>Adding book successfully!</h3></center>";
      }
   ?>
-
 
 </body>
 </html>

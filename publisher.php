@@ -1,5 +1,6 @@
 <?php
   session_start();
+  unset($_SESSION['pName']);
  ?>
 
 <!DOCTYPE html>
@@ -32,7 +33,8 @@
 
          <!-- Login button -->
          <button type="submit" name="button">Log In</button>
-         <button type="reset" name="button">reset</button>
+         <button type="reset" name="button">Reset</button>
+         <a href="index.php">Return</a>
       </form>
   </body>
 </center>
