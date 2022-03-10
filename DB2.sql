@@ -188,13 +188,13 @@ INSERT INTO `InOrder` (`ISBN`, `orderNumber`, `quantity`) VALUES
 ('9781454891536', '72748837PT', '1');
 
 create table Rating (
+  `Number` int NOT NULL AUTO_INCREMENT unique,
   userID int,
-  Number int,
   ISBN char(13),
   star int,
   comment varchar(200),
   time Date,
-  primary key (userID, `Number`, ISBN),
+  primary key (userID,  ISBN),
 
   constraint foreign key (userID) references Customers(userID)
 );

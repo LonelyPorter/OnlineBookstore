@@ -115,7 +115,6 @@
   // table body
   echo "<tbody>";
   while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-      echo '<form action="cart.php" method="post">';
       echo "<tr>";
       echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
       echo "<td>&emsp;".$row['title']."&emsp;</td>";
@@ -130,10 +129,17 @@
       echo "<td>&emsp;".$row['pName']."&emsp;</td>";
       echo "<td>&emsp;".$row['method']."&emsp;</td>";
       echo "<td>";
+      echo '<div style="display: flex;">';
+      echo '<form action="cart.php" method="post">';
       echo '<button type="submit" name="ISBN" value="' .$row['ISBN']. '">add to cart</button>';
+      echo '</form>';
+      echo '&emsp;';
+      echo '<form action="book.php" method="get">';
+      echo '<button type="submit" name="book" value="'.$row['ISBN'].'">Detail</button>';
+      echo '</form>';
+      echo '</div>';
       echo '</td>';
       echo "</tr>";
-      echo '</form>';
   }
   echo "</tbody></table>";
   ?>
