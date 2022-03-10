@@ -17,7 +17,7 @@
   $mydb = mysqli_select_db($myconnection, 'bookstore') or die('Could not select database');
 
   $email = $pwd = -1; // set non-empty so won't trigger empty login
-  if(!empty($_POST)) { // if coming from a form, set email and password
+  if(!empty($_POST['email']) && !empty($_POST['password'])) { // if coming from a form, set email and password
     $email = $_POST['email'];
     $pwd = $_POST['password'];
   }
@@ -76,7 +76,10 @@
     <form action="search.php" method="post">
       <button type="submit">Search</button>&nbsp;
     </form>
-
+    <!-- My (written) book -->
+    <form action="mybook.php" method="post">
+      <button type="submit">My Books</button>
+    </form>
   <?php
     // check for if it's superuser
     if($_SESSION['id'] == 1000) {
@@ -127,23 +130,85 @@
       echo "<td>&emsp;".$row['pName']."&emsp;</td>";
       echo "<td>&emsp;".$row['method']."&emsp;</td>";
       echo "<td>";
-      // echo '<input type="submit" name="ISBN" value="add to cart">';
       echo '<button type="submit" name="ISBN" value="' .$row['ISBN']. '">add to cart</button>';
       echo '</td>';
       echo "</tr>";
       echo '</form>';
   }
   echo "</tbody></table>";
-
-  // close database connection
-  mysqli_free_result($result);
-  mysqli_close($myconnection);
   ?>
+  <!-- Best Selling -->
+  <h3>Best Selling Book:</h3>
+  <form action="store.php" method="post">
+    <label>Year:</label>
+    <input type="text" name="year">
+    <input type="submit" name="best_sell" value="Submit">
+  </form>
+
+  <?php
+    if(!empty($_POST['best_sell'])) {
+      $year = "%";
+      if(!empty($_POST['year'])) {
+        $year = $_POST['year'];
+      }
+
+      $query = "SELECT T.ISBN, title, type, price, Category, in_stock, pName, method, max(quantity) from (
+                SELECT ISBN, sum(quantity) AS quantity, `time` FROM inorder, `order`
+                WHERE inorder.orderNumber = `order`.Number AND EXTRACT(year from `time`) LIKE ?
+                GROUP BY ISBN, EXTRACT(year FROM time)) as T, books
+                WHERE T.ISBN = books.ISBN;";
+        $stmt = mysqli_prepare($myconnection, $query);
+        mysqli_stmt_bind_param($stmt, "s", $year);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+
+        // table title
+        echo "<table>
+          <thead>
+            <tr>
+              <th>ISBN</th>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Stock</th>
+              <th>Publisher Name</th>
+              <th>Delivery Method</th>
+            </tr>
+          </thead>";
+
+        echo "<tbody>";
+        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+          echo "<tr>";
+          echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
+          echo "<td>&emsp;".$row['title']."&emsp;</td>";
+          echo "<td>&emsp;".$row['type']."&emsp;</td>";
+          echo "<td>&emsp;".$row['price']."&emsp;</td>";
+          echo "<td>&emsp;".$row['Category']."&emsp;</td>";
+          if ($row['in_stock'] >= 0) {
+              echo "<td>&emsp;".$row['in_stock']."&emsp;</td>";
+          } else {
+              echo "<td>&emsp;&infin;&emsp;</td>";
+          }
+          echo "<td>&emsp;".$row['pName']."&emsp;</td>";
+          echo "<td>&emsp;".$row['method']."&emsp;</td>";
+          echo "</tr>";
+        }
+        echo "</tbody></table>";
+    }
+   ?>
+
   <!-- Go to Rating -->
   <br>
   <form class="" action="rating.php" method="post">
     <input type="submit" name="" value="View Rating">
   </form>
+
+  <?php
+  // close database connection
+  mysqli_free_result($result);
+  mysqli_close($myconnection);
+   ?>
 
 </body>
 </html>
