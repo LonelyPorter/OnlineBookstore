@@ -78,7 +78,7 @@
     </form>
     <!-- My (written) book -->
     <form action="mybook.php" method="post">
-      <button type="submit">My Books</button>
+      <button type="submit">My Books</button>&nbsp;
     </form>
   <?php
     // check for if it's superuser
