@@ -206,7 +206,7 @@ create table Rating (
 INSERT INTO `rating` (`Number`, `userID`, `ISBN`, `star`, `comment`, `time`) VALUES
 (1, 1010, '9780134763644', 5, 'excellent', '2021-01-03'),
 (2, 1010, '9781284194531', 4, 'nice', '2021-01-03'),
-(3, 1009, '9781454891536', 3, 'very bad', '2022-02-20'),
+(3, 1009, '9781454891536', 1, 'very bad', '2022-02-20'),
 (4, 1009, '9780735219106', 4, 'great', '2022-02-25'),
 (5, 1008, '9780593230572', 3, 'good', '2022-03-03');
 
@@ -214,20 +214,20 @@ INSERT INTO `rating` (`Number`, `userID`, `ISBN`, `star`, `comment`, `time`) VAL
 
 create table Payment(
   userID int,
-  Account char(16),
-  expire char(5),
-  cvs int,
+  Account char(16) NOT NULL,
+  expire char(6) NOT NULL,
+  cvs int(3) NOT NULL,
   primary key (userID, Account),
 
   constraint foreign key (userID) references Customers(userID)
 );
 
 INSERT INTO `Payment` (`userID`, `Account`, `expire`, `cvs`) VALUES
-(1001, '4556974849415440', ' 3/23', 453),
-(1004, '2301229546494990', ' 11/2', 425),
-(1007, '4532870842357070', ' 10/2', 128),
-(1010, '4716005143328930', ' 02/2', 753),
-(1013, '4312584639349740', ' 05/2', 356);
+(1001, '4556974849415440', ' 03/23', 453),
+(1004, '2301229546494990', ' 11/25', 425),
+(1007, '4532870842357070', ' 10/26', 128),
+(1010, '4716005143328930', ' 02/24', 753),
+(1013, '4312584639349740', ' 05/27', 356);
 
 create table ShoppingCart (
   ID int NOT NULL AUTO_INCREMENT,
