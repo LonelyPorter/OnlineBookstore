@@ -165,45 +165,51 @@
                 SELECT ISBN, sum(quantity) AS quantity, `time` FROM inorder, `order`
                 WHERE inorder.orderNumber = `order`.Number AND EXTRACT(year from `time`) LIKE ?
                 GROUP BY ISBN, EXTRACT(year FROM time)) as T, books
-                WHERE T.ISBN = books.ISBN;";
+                WHERE T.ISBN = books.ISBN HAVING max(quantity) IS NOT NULL;";
         $stmt = mysqli_prepare($myconnection, $query);
         mysqli_stmt_bind_param($stmt, "s", $year);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
 
-        // table title
-        echo "<table>
-          <thead>
-            <tr>
-              <th>ISBN</th>
-              <th>Title</th>
-              <th>Type</th>
-              <th>Price</th>
-              <th>Category</th>
-              <th>Stock</th>
-              <th>Publisher Name</th>
-              <th>Delivery Method</th>
-            </tr>
-          </thead>";
+        if (mysqli_num_rows($result) == 0) {
+            //results are empty
+            echo "<p>No books for the entered year.</p>";
+        } else {
+          // table title
+          echo "<table>
+            <thead>
+              <tr>
+                <th>ISBN</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Stock</th>
+                <th>Publisher Name</th>
+                <th>Delivery Method</th>
+              </tr>
+            </thead>";
 
-        echo "<tbody>";
-        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-          echo "<tr>";
-          echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
-          echo "<td>&emsp;".$row['title']."&emsp;</td>";
-          echo "<td>&emsp;".$row['type']."&emsp;</td>";
-          echo "<td>&emsp;".$row['price']."&emsp;</td>";
-          echo "<td>&emsp;".$row['Category']."&emsp;</td>";
-          if ($row['in_stock'] >= 0) {
-              echo "<td>&emsp;".$row['in_stock']."&emsp;</td>";
-          } else {
-              echo "<td>&emsp;&infin;&emsp;</td>";
+          echo "<tbody>";
+          while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+            echo "<tr>";
+            echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
+            echo "<td>&emsp;".$row['title']."&emsp;</td>";
+            echo "<td>&emsp;".$row['type']."&emsp;</td>";
+            echo "<td>&emsp;".$row['price']."&emsp;</td>";
+            echo "<td>&emsp;".$row['Category']."&emsp;</td>";
+            if ($row['in_stock'] >= 0) {
+                echo "<td>&emsp;".$row['in_stock']."&emsp;</td>";
+            } else {
+                echo "<td>&emsp;&infin;&emsp;</td>";
+            }
+            echo "<td>&emsp;".$row['pName']."&emsp;</td>";
+            echo "<td>&emsp;".$row['method']."&emsp;</td>";
+            echo "</tr>";
           }
-          echo "<td>&emsp;".$row['pName']."&emsp;</td>";
-          echo "<td>&emsp;".$row['method']."&emsp;</td>";
-          echo "</tr>";
+          echo "</tbody></table>";
         }
-        echo "</tbody></table>";
+
     }
    ?>
 
