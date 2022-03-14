@@ -12,8 +12,7 @@
 <body>
   <?php
   // establish database connection
-  $myconnection = mysqli_connect('localhost', 'root', '')
-  or die('Could not connect: ' . mysql_error());
+  $myconnection = mysqli_connect('localhost', 'root', '') or die('Could not connect: ' . mysql_error());
   $mydb = mysqli_select_db($myconnection, 'bookstore') or die('Could not select database');
 
   $email = $pwd = -1; // set non-empty so won't trigger empty login
@@ -79,6 +78,10 @@
     <!-- My (written) book -->
     <form action="mybook.php" method="post">
       <button type="submit">My Books</button>&nbsp;
+    </form>
+    <!-- My Infor -->
+    <form action="myinfo.php" method="post">
+      <button type="submit" name="info">My Info</button>&nbsp;
     </form>
   <?php
     // check for if it's superuser

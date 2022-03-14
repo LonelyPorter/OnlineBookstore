@@ -103,11 +103,13 @@ create table `Order` (
   constraint foreign key (userID) references Customers(userID)
 );
 
-INSERT INTO `Order` (`Number`, `time`, `status`, `userID`) VALUES
+INSERT INTO `order` (`Number`, `time`, `status`, `userID`) VALUES
 ('369A4545U8', '2022-02-17', 'pending', 1003),
-('5496C9V939', '2022-02-15', 'processing', 1008),
+('4579A5907M', '2022-03-05', 'processing', 1001),
+('5496C9V939', '2022-02-15', 'finished', 1008),
 ('723F68G592', '2022-01-15', 'pending', 1005),
-('72748837PT', '2022-02-16', 'processing', 1009),
+('72748837PT', '2022-02-16', 'finished', 1009),
+('745698F3P1', '2022-01-31', 'processing', 1002),
 ('788727W426', '2021-01-01', 'finished', 1010),
 ('854T523666', '2022-02-01', 'pending', 1004),
 ('93347467GJ', '2021-04-05', 'pending', 1007),
@@ -180,12 +182,14 @@ create table InOrder (
   constraint foreign key (orderNumber) references `Order`(`Number`)
 );
 
-INSERT INTO `InOrder` (`ISBN`, `orderNumber`, `quantity`) VALUES
+INSERT INTO `inorder` (`ISBN`, `orderNumber`, `quantity`) VALUES
+('9780134763644', '4579A5907M', 1),
+('9780134763644', '745698F3P1', 1),
 ('9780134763644', '788727W426', 1),
-('9780593230572', '5496C9V939', '1'),
-('9780735219106', '72748837PT', '1'),
-('9781284194531', '788727W426', '1'),
-('9781454891536', '72748837PT', '1');
+('9780593230572', '5496C9V939', 1),
+('9780735219106', '72748837PT', 1),
+('9781284194531', '788727W426', 1),
+('9781454891536', '72748837PT', 1);
 
 create table Rating (
   `Number` int NOT NULL AUTO_INCREMENT unique,
@@ -199,12 +203,14 @@ create table Rating (
   constraint foreign key (userID) references Customers(userID)
 );
 
-INSERT INTO `Rating` (`userID`, `Number`, `ISBN`, `star`, `comment`, `time`) VALUES
-(1001, 1, '9780134763644', 3, 'good', '2022-01-13'),
-(1002, 2, '9780134763645', 4, 'great', '2022-01-19'),
-(1003, 3, '9780134763646', 3, 'good', '2022-01-25'),
-(1004, 4, '9780134763647', 5, 'excellent', '2022-02-25'),
-(1005, 5, '9780134763648', 1, 'very bad', '2022-02-28');
+INSERT INTO `rating` (`Number`, `userID`, `ISBN`, `star`, `comment`, `time`) VALUES
+(1, 1010, '9780134763644', 5, 'excellent', '2021-01-03'),
+(2, 1010, '9781284194531', 4, 'nice', '2021-01-03'),
+(3, 1009, '9781454891536', 3, 'very bad', '2022-02-20'),
+(4, 1009, '9780735219106', 4, 'great', '2022-02-25'),
+(5, 1008, '9780593230572', 3, 'good', '2022-03-03');
+
+
 
 create table Payment(
   userID int,

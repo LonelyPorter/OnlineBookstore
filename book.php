@@ -139,10 +139,10 @@
 
       // if not logged in or user not purchase the book
       $query = "SELECT * FROM inorder, `order`
-                WHERE inorder.orderNumber = `order`.Number
-                 AND userID = ?;";
+                WHERE inorder.orderNumber = `order`.Number and `order`.status = 'finished'
+                 AND userID = ? AND ISBN = ?;";
       $stmt = $mydb->prepare($query);
-      $stmt->bind_param('i', $_SESSION['id']);
+      $stmt->bind_param('is', $_SESSION['id'], $_GET['book']);
       $stmt->execute();
       $result = $stmt->get_result();
 

@@ -42,6 +42,8 @@
         <input type="submit" name="login" value="Log In">
         <!-- reset will re-enter the page so the fill will be reset -->
         <input type="reset" value="Reset">&nbsp;&nbsp;
+        <!-- link to log in as guest -->
+        <a href="guest.php">Log In as Guest</a>&nbsp;
         <!-- link to publisher log in page -->
         <a href="publisher.php">Publisher</a>
       </form>
