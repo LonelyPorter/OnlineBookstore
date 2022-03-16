@@ -123,13 +123,30 @@
 
         // if address exists
         if (!empty($address)) {
-            // add to in order
-            $query = "INSERT INTO inorder(ISBN, orderNumber, quantity)
-                  SELECT incart.ISBN, shoppingcart.orderNumber, incart.quantity FROM incart, shoppingcart
-                  WHERE incart.cartID=shoppingcart.ID and incart.cartOrder=shoppingcart.orderNumber and userid=?;";
+            // Add to inOrder and update stock in Books
+            $query = "SELECT incart.ISBN, shoppingcart.orderNumber, incart.quantity FROM incart, shoppingcart
+                WHERE incart.cartID=shoppingcart.ID and incart.cartOrder=shoppingcart.orderNumber and userid=?;";
             $stmt = $mydb->prepare($query);
             $stmt->bind_param('i', $_SESSION['id']);
             $stmt->execute();
+            $result = $stmt->get_result();
+
+            while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+              // Add to Order
+              $q = "INSERT INTO inOrder(ISBN, orderNumber, quantity)
+                VALUES(?, ?, ?);";
+              $s = $mydb->prepare($q);
+              $s->bind_param('ssi', $row['ISBN'], $row['orderNumber'], $row['quantity']);
+              $s->execute();
+              $s->close();
+
+              // Update in_stock in Books
+              $q = "UPDATE Books SET in_stock = in_stock - ? WHERE ISBN = ?;";
+              $s = $mydb->prepare($q);
+              $s->bind_param('is', $row['quantity'], $row['ISBN']);
+              $s->execute();
+              $s->close();
+            }
 
             // delete inCart
             $query = "DELETE FROM incart WHERE cartOrder in
@@ -147,7 +164,7 @@
 
             // update order history
             $query = "UPDATE `order` SET status = 'processing'
-          WHERE status = 'pending' and userID = ?;";
+              WHERE status = 'pending' and userID = ?;";
             $stmt = $mydb->prepare($query);
             $stmt->bind_param('i', $_SESSION['id']);
             $stmt->execute();
@@ -192,7 +209,6 @@
         echo "<p>Your Shopping Cart is Still Empty</p>";
         echo "<br>";
     } else {
-
       echo "<table>
       <thead>
       <tr>
