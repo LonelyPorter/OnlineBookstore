@@ -1,3 +1,9 @@
+<!--
+A specific Book Page (Contains ISBN, title, publisher, author...)
+Logged in user can purchase book
+User who has purchased the book can comment
+(each user can only one comment, comment again will override the previous one)
+-->
 <?php
   session_start();
  ?>
@@ -97,7 +103,12 @@
         $mydb->commit();
       } catch (\Exception $e) {
         $mydb->rollback();
-        echo "Error";
+        $query = "UPDATE Rating SET star = ?, comment = ?, time = ?
+            WHERE userID = ? and ISBN = ?";
+        $stmt = $mydb->prepare($query);
+        $stmt->bind_param('issis', $star, $comment, $time, $id, $isbn);
+        $stmt->execute();
+        echo "*Comment Updated";
       }
 
     }
