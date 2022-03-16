@@ -109,6 +109,7 @@ create table `Order` (
 );
 
 INSERT INTO `order` (`Number`, `time`, `status`, `userID`) VALUES
+('031L3577Q6', '2022-03-13', 'finished', 1001),
 ('1M1443787Y', '2022-03-15', 'pending', 1004),
 ('369A4545U8', '2022-02-17', 'pending', 1003),
 ('4579A5907M', '2022-03-05', 'finished', 1001),
@@ -195,7 +196,8 @@ create table InOrder (
 );
 
 INSERT INTO `inorder` (`ISBN`, `orderNumber`, `quantity`) VALUES
-('9780134763644', '745698F3P1', 2),
+('9780134763644', '031L3577Q6', 1),
+('9780134763644', '745698F3P1', 1),
 ('9780134763644', '788727W426', 2),
 ('9780593230572', '5496C9V939', 1),
 ('9780735219106', '72748837PT', 2),
