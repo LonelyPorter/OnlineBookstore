@@ -118,7 +118,6 @@
           echo "<td>&emsp;".$row['pName']."&emsp;</td>";
           echo "<td>&emsp;".$row['method']."&emsp;</td>";
           echo "<td>";
-          // echo '<input type="submit" name="ISBN" value="add to cart">';
           echo '<button type="submit" name="ISBN" value="' .$row['ISBN']. '">add to cart</button>';
           echo '</td>';
           echo "</tr>";

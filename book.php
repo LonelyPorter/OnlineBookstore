@@ -89,7 +89,7 @@
 
       try {
         $query = "INSERT INTO Rating (userID, ISBN, star, comment, time)
-                  VALUES (?, ?, ?, ?, ?)";
+                  VALUES (?, ?, ?, ?, ?) ORDER BY time DESC";
         $stmt = $mydb->prepare($query);
         $stmt->bind_param('isiss', $id, $isbn, $star, $comment, $time);
         $stmt->execute();
@@ -116,7 +116,6 @@
         <thead>
           <tr>
             <th>userID</th>
-            <th>Number</th>
             <th>ISBN</th>
             <th>star</th>
             <th>comment</th>
@@ -127,7 +126,6 @@
       while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
         echo "<tr>";
         echo "<td>&emsp;".$row['userID']."&emsp;</td>";
-        echo "<td>&emsp;".$row['Number']."&emsp;</td>";
         echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
         echo "<td>&emsp;".$row['star']."&emsp;</td>";
         echo "<td>&emsp;".$row['comment']."&emsp;</td>";

@@ -87,12 +87,17 @@ create table Books (
   constraint foreign key (method) references Delivery(method)
 );
 
-INSERT INTO `Books` (`ISBN`, `title`, `type`, `price`, `Category`, `in_stock`, `pName`, `method`) VALUES
+INSERT INTO `books` (`ISBN`, `title`, `type`, `price`, `Category`, `in_stock`, `pName`, `method`) VALUES
 ('9780134763644', 'Calculus', 'hardcover', 109.55, 'Mathematics', 15, 'Pearson', 'hardcover'),
 ('9780593230572', 'The 1619 Project: A New Origin Story', 'audio', 30.63, 'History', -1, 'Hanging Loose Press', 'email'),
+('9780735211292', 'Atomic Habits: An Easy & Proven Way to Build Good ', 'email', 19.99, 'Social Psychology', 25, 'Graywolf Press', 'email'),
 ('9780735219106', 'Where the Crawdads Sing', 'paperback', 9.98, 'Genre Fiction', 8, 'Dzanc Books', 'paperback'),
-('9781284194531', 'Ugly''s Electrical References, 2020 Edition', 'eletronic', 13.58, 'Engineering', -1, 'Akashic Books', 'email'),
-('9781454891536', 'Property (Examples & Explanations)', 'paperback', 59.99, 'Business', 12, 'Graywolf Press', 'paperback');
+('9781284194531', 'Ugly\'s Electrical References, 2020 Edition', 'eletronic', 13.58, 'Engineering', -1, 'Akashic Books', 'email'),
+('9781370873487', 'The Saints of Swallow Hill: A Fascinating Depressi', 'hardcover', 45.5, 'Friction', 9, 'McSweeney\'s', 'hardcover'),
+('9781454891536', 'Property (Examples & Explanations)', 'paperback', 59.99, 'Business', 12, 'Graywolf Press', 'paperback'),
+('9781589255517', 'I Love You to the Moon and Back', 'hardcover', 29.99, 'Novel', 5, 'Dzanc Books', 'hardcover'),
+('9784958025933', 'Lessons From The Edge: A Memoir', 'paperback', 61.99, 'Biography', 23, 'Pearson', 'paperback'),
+('9785829963316', 'A New Earth: Awakening to Your Life\'s Purpose', 'paperback', 13.98, 'Education', 16, 'Akashic Books', 'paperback');
 
 create table `Order` (
   Number varchar(20) primary key,
@@ -104,14 +109,16 @@ create table `Order` (
 );
 
 INSERT INTO `order` (`Number`, `time`, `status`, `userID`) VALUES
+('1M1443787Y', '2022-03-15', 'pending', 1004),
 ('369A4545U8', '2022-02-17', 'pending', 1003),
-('4579A5907M', '2022-03-05', 'processing', 1001),
+('4579A5907M', '2022-03-05', 'finished', 1001),
 ('5496C9V939', '2022-02-15', 'finished', 1008),
 ('723F68G592', '2022-01-15', 'pending', 1005),
-('72748837PT', '2022-02-16', 'finished', 1009),
+('72748837PT', '2021-02-16', 'finished', 1009),
 ('745698F3P1', '2022-01-31', 'processing', 1002),
 ('788727W426', '2021-01-01', 'finished', 1010),
-('854T523666', '2022-02-01', 'pending', 1004),
+('854T523666', '2021-02-01', 'finished', 1004),
+('88H503234H', '2022-03-15', 'processing', 1001),
 ('93347467GJ', '2021-04-05', 'pending', 1007),
 ('L738X73953', '2021-03-09', 'pending', 1006);
 
@@ -165,12 +172,17 @@ create table `Write` (
   constraint foreign key (userID) references Author(userID)
 );
 
-INSERT INTO `Write` (`ISBN`, `userID`) VALUES
+INSERT INTO `write` (`ISBN`, `userID`) VALUES
 ('9780134763644', 1006),
 ('9780593230572', 1008),
+('9780735211292', 1006),
 ('9780735219106', 1007),
 ('9781284194531', 1010),
-('9781454891536', 1009);
+('9781370873487', 1006),
+('9781454891536', 1009),
+('9781589255517', 1007),
+('9784958025933', 1008),
+('9785829963316', 1010);
 
 create table InOrder (
   ISBN char(13),
@@ -183,13 +195,15 @@ create table InOrder (
 );
 
 INSERT INTO `inorder` (`ISBN`, `orderNumber`, `quantity`) VALUES
-('9780134763644', '4579A5907M', 1),
-('9780134763644', '745698F3P1', 1),
-('9780134763644', '788727W426', 1),
+('9780134763644', '745698F3P1', 2),
+('9780134763644', '788727W426', 2),
 ('9780593230572', '5496C9V939', 1),
-('9780735219106', '72748837PT', 1),
+('9780735219106', '72748837PT', 2),
+('9780735219106', '854T523666', 1),
 ('9781284194531', '788727W426', 1),
-('9781454891536', '72748837PT', 1);
+('9781370873487', '4579A5907M', 1),
+('9781454891536', '72748837PT', 1),
+('9781589255517', '88H503234H', 3);
 
 create table Rating (
   `Number` int NOT NULL AUTO_INCREMENT unique,
@@ -204,11 +218,13 @@ create table Rating (
 );
 
 INSERT INTO `rating` (`Number`, `userID`, `ISBN`, `star`, `comment`, `time`) VALUES
+(6, 1001, '9780134763644', 5, 'awesome', '2022-03-15'),
+(7, 1004, '9780735219106', 3, 'not bad', '2021-03-15'),
+(5, 1008, '9780593230572', 3, 'good', '2022-03-03'),
+(4, 1009, '9780735219106', 4, 'great', '2021-02-25'),
+(3, 1009, '9781454891536', 1, 'very bad', '2021-02-20'),
 (1, 1010, '9780134763644', 5, 'excellent', '2021-01-03'),
-(2, 1010, '9781284194531', 4, 'nice', '2021-01-03'),
-(3, 1009, '9781454891536', 1, 'very bad', '2022-02-20'),
-(4, 1009, '9780735219106', 4, 'great', '2022-02-25'),
-(5, 1008, '9780593230572', 3, 'good', '2022-03-03');
+(2, 1010, '9781284194531', 4, 'nice', '2021-01-03');
 
 
 
@@ -239,9 +255,9 @@ create table ShoppingCart (
   constraint foreign key (userID) references Customers(userID)
 );
 
-INSERT INTO `ShoppingCart` (`ID`, `orderNumber`, `userID`) VALUES
+INSERT INTO `shoppingcart` (`ID`, `orderNumber`, `userID`) VALUES
 (1, '369A4545U8', 1003),
-(2, '854T523666', 1004),
+(2, '1M1443787Y', 1004),
 (3, '723F68G592', 1005),
 (4, 'L738X73953', 1006),
 (5, '93347467GJ', 1007);
@@ -258,9 +274,12 @@ create table InCart (
   constraint foreign key (cartOrder) references ShoppingCart(orderNumber)
 );
 
-INSERT INTO `InCart` (`ISBN`, `cartID`, `cartOrder`, `quantity`) VALUES
+INSERT INTO `incart` (`ISBN`, `cartID`, `cartOrder`, `quantity`) VALUES
 ('9780134763644', 1, '369A4545U8', 1),
-('9780593230572', 3, '723F68G592', 1),
-('9780735219106', 2, '854T523666', 1),
+('9780593230572', 3, '723F68G592', 2),
+('9780735219106', 5, '93347467GJ', 1),
 ('9781284194531', 5, '93347467GJ', 1),
-('9781454891536', 4, 'L738X73953', 1);
+('9781370873487', 2, '1M1443787Y', 1),
+('9781454891536', 4, 'L738X73953', 1),
+('9784958025933', 1, '369A4545U8', 1),
+('9784958025933', 5, '93347467GJ', 1);

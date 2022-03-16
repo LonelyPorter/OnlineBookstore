@@ -73,7 +73,7 @@
          echo "<td>&emsp;".$row['method']."&emsp;</td>";
          // update price
          echo "<td>";
-         echo '<input type="number" step="0.01" name="price" required>';
+         echo '<input type="number" step="0.01" name="price" required/>';
          echo '<button type="submit" name="price_submit" value="'.$row['ISBN'].'">Update</button>';
          echo '<input type="reset" value="Reset">';
          echo "</td>";

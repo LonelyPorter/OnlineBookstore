@@ -187,37 +187,38 @@
     $stmt->execute();
     $result = $stmt->get_result();
 
-    echo "<table>
-    <thead>
-    <tr>
-    <th>Title</th>
-    <th>ISBN</th>
-    <th>Quantity</th>
-    <th>Type</th>
-    <th></th>
-    </tr>
-    </thead>";
-
     if (mysqli_num_rows($result) == 0) {
         //results are empty
         echo "<p>Your Shopping Cart is Still Empty</p>";
-        echo "<br><br>";
+        echo "<br>";
     } else {
-        echo "<tbody>";
-        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-            echo "<tr>";
-            echo "<td>&emsp;".$row['title']."&emsp;</td>";
-            echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
-            echo "<td>&emsp;".$row['quantity']."&emsp;</td>";
-            echo "<td>&emsp;".$row['type']."&emsp;</td>";
-            echo '<td><form action="" method="post">';
-            echo '<button type="submit" name="delete" value="'.$row['ISBN'].'">Delete</button>';
-            echo '</form></td>';
-            echo "</tr>";
-        }
+
+      echo "<table>
+      <thead>
+      <tr>
+      <th>Title</th>
+      <th>ISBN</th>
+      <th>Quantity</th>
+      <th>Type</th>
+      <th></th>
+      </tr>
+      </thead>";
+
+      echo "<tbody>";
+      while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+          echo "<tr>";
+          echo "<td>&emsp;".$row['title']."&emsp;</td>";
+          echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
+          echo "<td>&emsp;".$row['quantity']."&emsp;</td>";
+          echo "<td>&emsp;".$row['type']."&emsp;</td>";
+          echo '<td><form action="" method="post">';
+          echo '<button type="submit" name="delete" value="'.$row['ISBN'].'">Delete</button>';
+          echo '</form></td>';
+          echo "</tr>";
+      }
+      echo "</tbody>";
+      echo "</table>";
     }
-    echo "</tbody>";
-    echo "</table>";
 
     // display Bought message
     if (!empty($_POST['purchase']) && mysqli_num_rows($result) == 0) {
