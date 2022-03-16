@@ -16,9 +16,9 @@
   $mydb = mysqli_select_db($myconnection, 'bookstore') or die('Could not select database');
 
   $email = $pwd = -1; // set non-empty so won't trigger empty login
-  if(!empty($_POST['email']) && !empty($_POST['password'])) { // if coming from a form, set email and password
+  if (!empty($_POST['email']) && !empty($_POST['password'])) { // if coming from a form, set email and password
     $email = $_POST['email'];
-    $pwd = $_POST['password'];
+      $pwd = $_POST['password'];
   }
 
   // if one of the input from login is empty
@@ -79,14 +79,14 @@
     <form action="mybook.php" method="post">
       <button type="submit">My Books</button>&nbsp;
     </form>
-    <!-- My Infor -->
+    <!-- My Info -->
     <form action="myinfo.php" method="post">
       <button type="submit" name="info">My Info</button>&nbsp;
     </form>
   <?php
     // check for if it's superuser
-    if($_SESSION['id'] == 1000) {
-      echo '<form action="update.php" method="post">
+    if ($_SESSION['id'] == 1000) {
+        echo '<form action="update.php" method="post">
             <button type="submit">Update</button>&nbsp;
             </form>';
     }
@@ -96,7 +96,8 @@
 
   <?php
   // get books data
-  $query = 'SELECT * FROM Books';
+  $query = 'SELECT books.ISBN, title, type, price, Category, in_stock, pName, method, name
+      FROM books, `write`, customers WHERE books.ISBN = `write`.ISBN AND customers.userID = `write`.userID;';
   $result = mysqli_query($myconnection, $query) or die('Query failed: ' . mysql_error());
 
   // table title
@@ -108,6 +109,7 @@
         <th>Type</th>
         <th>Price</th>
         <th>Category</th>
+        <th>Author</th>
         <th>Stock</th>
         <th>Publisher Name</th>
         <th>Delivery Method</th>
@@ -124,6 +126,7 @@
       echo "<td>&emsp;".$row['type']."&emsp;</td>";
       echo "<td>&emsp;".$row['price']."&emsp;</td>";
       echo "<td>&emsp;".$row['Category']."&emsp;</td>";
+      echo "<td>&emsp;".$row['name']."&emsp;</td>";
       if ($row['in_stock'] >= 0) {
           echo "<td>&emsp;".$row['in_stock']."&emsp;</td>";
       } else {
@@ -155,19 +158,24 @@
   </form>
 
   <?php
-    if(!empty($_POST['best_sell'])) {
-      $year = "%";
-      if(!empty($_POST['year'])) {
-        $year = $_POST['year'];
-      }
+    if (!empty($_POST['best_sell'])) {
+        $year = "%";
+        if (!empty($_POST['year'])) {
+            $year = $_POST['year'];
+        }
 
-      $query = "SELECT T.ISBN, title, type, price, Category, in_stock, pName, method, max(quantity) from (
-                SELECT ISBN, sum(quantity) AS quantity, `time` FROM inorder, `order`
-                WHERE inorder.orderNumber = `order`.Number AND EXTRACT(year from `time`) LIKE ?
-                GROUP BY ISBN, EXTRACT(year FROM time)) as T, books
-                WHERE T.ISBN = books.ISBN HAVING max(quantity) IS NOT NULL;";
+        $query = "SELECT DISTINCT T1.ISBN, title, type, price, Category, in_stock, pName, method, name FROM
+          (SELECT ISBN, sum(quantity) as quantity FROM inorder, `order`
+          WHERE inorder.orderNumber = `order`.`Number` AND EXTRACT(year from `time`) LIKE ? AND status != 'pending'
+          GROUP BY ISBN
+          HAVING quantity =
+          (SELECT MAX(quantity) FROM
+          (SELECT ISBN, sum(quantity) AS quantity 
+          FROM inorder, `order` WHERE inorder.orderNumber = `order`.`Number`
+          AND EXTRACT(year from `time`) LIKE ? AND status!='pending' GROUP BY ISBN) AS T)) AS T1, books, Customers, `write`
+          WHERE T1.ISBN = books.ISBN AND books.ISBN = `write`.ISBN AND customers.userID = `write`.userID;";
         $stmt = mysqli_prepare($myconnection, $query);
-        mysqli_stmt_bind_param($stmt, "s", $year);
+        mysqli_stmt_bind_param($stmt, "ss", $year, $year);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
 
@@ -175,8 +183,8 @@
             //results are empty
             echo "<p>No books for the entered year.</p>";
         } else {
-          // table title
-          echo "<table>
+            // table title
+            echo "<table>
             <thead>
               <tr>
                 <th>ISBN</th>
@@ -184,32 +192,33 @@
                 <th>Type</th>
                 <th>Price</th>
                 <th>Category</th>
+                <th>Author</th>
                 <th>Stock</th>
                 <th>Publisher Name</th>
                 <th>Delivery Method</th>
               </tr>
             </thead>";
 
-          echo "<tbody>";
-          while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-            echo "<tr>";
-            echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
-            echo "<td>&emsp;".$row['title']."&emsp;</td>";
-            echo "<td>&emsp;".$row['type']."&emsp;</td>";
-            echo "<td>&emsp;".$row['price']."&emsp;</td>";
-            echo "<td>&emsp;".$row['Category']."&emsp;</td>";
-            if ($row['in_stock'] >= 0) {
-                echo "<td>&emsp;".$row['in_stock']."&emsp;</td>";
-            } else {
-                echo "<td>&emsp;&infin;&emsp;</td>";
+            echo "<tbody>";
+            while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                echo "<tr>";
+                echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
+                echo "<td>&emsp;".$row['title']."&emsp;</td>";
+                echo "<td>&emsp;".$row['type']."&emsp;</td>";
+                echo "<td>&emsp;".$row['price']."&emsp;</td>";
+                echo "<td>&emsp;".$row['Category']."&emsp;</td>";
+                echo "<td>&emsp;".$row['name']."&emsp;</td>";
+                if ($row['in_stock'] >= 0) {
+                    echo "<td>&emsp;".$row['in_stock']."&emsp;</td>";
+                } else {
+                    echo "<td>&emsp;&infin;&emsp;</td>";
+                }
+                echo "<td>&emsp;".$row['pName']."&emsp;</td>";
+                echo "<td>&emsp;".$row['method']."&emsp;</td>";
+                echo "</tr>";
             }
-            echo "<td>&emsp;".$row['pName']."&emsp;</td>";
-            echo "<td>&emsp;".$row['method']."&emsp;</td>";
-            echo "</tr>";
-          }
-          echo "</tbody></table>";
+            echo "</tbody></table>";
         }
-
     }
    ?>
 
