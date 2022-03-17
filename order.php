@@ -33,22 +33,25 @@
      $stmt->execute();
      $result = $stmt->get_result();
 
-     echo "<table>
+     if(mysqli_num_rows($result) == 0) {
+       echo "<h2>No order history can be found!</h2>";
+     } else {
+       echo "<table>
        <thead>
-         <tr>
-           <th>Number</th>
-           <th>Title</th>
-           <th>ISBN</th>
-           <th>Quantity</th>
-           <th>Status</th>
-           <th>Time</th>
-           <th>Option</th>
-         </tr>
+       <tr>
+       <th>Number</th>
+       <th>Title</th>
+       <th>ISBN</th>
+       <th>Quantity</th>
+       <th>Status</th>
+       <th>Time</th>
+       <th>Option</th>
+       </tr>
        </thead>";
 
-     // table body
-     echo "<tbody>";
-     while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
+       // table body
+       echo "<tbody>";
+       while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
          echo "<tr>";
          echo "<td>&emsp;".$row['orderNumber']."&emsp;</td>";
          echo "<td>&emsp;".$row['title']."&emsp;</td>";
@@ -57,13 +60,15 @@
          echo "<td>&emsp;".$row['status']."&emsp;</td>";
          echo "<td>&emsp;".$row['time']."&emsp;</td>";
          echo '<td><form action="cart.php" method="post">
-                  <button type="submit" name="ISBN" value="'.$row['ISBN'].'">Reorder</button>
-               </form></td>';
+         <button type="submit" name="ISBN" value="'.$row['ISBN'].'">Reorder</button>
+         </form></td>';
          echo "</tr>";
+       }
+
+       echo "</tbody>";
+       echo "</table>";
      }
 
-     echo "</tbody>";
-     echo "</table>";
 
      $result->free();
      $mydb->close();

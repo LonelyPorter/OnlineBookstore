@@ -13,6 +13,8 @@ Update delivery method price
     <title>Administrator</title>
   </head>
   <body>
+
+  <h1>Superuser Manage</h1>
   <?php
     // check if logged in
     if (!isset($_SESSION['id'])) {
@@ -86,7 +88,7 @@ Update delivery method price
         foreach ($_POST['status'] as $key => $value) {
           $query = "UPDATE `order` SET status = ? WHERE `Number` = ?;";
           $stmt = $mydb->prepare($query);
-          $stmt->bind_param('ss', $_POST['status'][$key], $_POST['ISBN'][$key]);
+          $stmt->bind_param('ss', $_POST['status'][$key], $_POST['order'][$key]);
           $stmt->execute();
           $stmt->close();
         }
@@ -120,14 +122,14 @@ Update delivery method price
         echo '<form action="" method="post">';
         echo "<td>&emsp;".$row['Number']."&emsp;</td>";
         // order number in form
-        echo '<input type="hidden" name="ISBN[]" value="'.$row['Number'].'">';
+        echo '<input type="hidden" name="order[]" value="'.$row['Number'].'">';
         echo "<td>&emsp;".$row['userID']."&emsp;</td>";
         echo "<td>&emsp;".$row['time']."&emsp;</td>";
         echo "<td>&emsp;".$row['status']."&emsp;</td>";
         // status
         echo '<td>';
         echo '<select name="status[]">';
-        echo '<option disabled selected>'.$status[$row['status']].'</option>';
+        echo '<option selected>'.$status[$row['status']].'</option>';
         unset($status[$row['status']]);
         foreach ($status as $s) {
           echo '<option value="'.$s.'">'.$s.'</option>';

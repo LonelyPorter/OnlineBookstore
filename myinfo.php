@@ -147,7 +147,7 @@
     <!-- Form for changing email -->
     <form class="" action="" method="post">
       <label>Email: </label>
-      <input type="text" name="email" required>
+      <input type="email" name="email" required>
       <button type="submit">Submit</button>&nbsp;
       <input type="reset" value="Reset"><br><br>
     </form>
