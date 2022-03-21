@@ -1,6 +1,6 @@
 <?php
   session_start();
-  function generateOrder()
+  function generateOrder() // Generate random order number
   {
       $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       $numbers = '0123456789';
@@ -18,6 +18,7 @@
       return $orderNumber;
   }
  ?>
+ 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -196,8 +197,9 @@
     }
 
     // display shopping cart
-    $query = "SELECT title, books.ISBN, quantity, type FROM inCart, ShoppingCart,books
-    WHERE cartorder=orderNumber AND books.ISBN=incart.ISBN AND userid = ?;";
+    $query = "SELECT title, books.ISBN, quantity, type, price*quantity as `total price`, time, cost
+      FROM inCart, ShoppingCart, Books, Delivery
+      WHERE cartOrder=orderNumber AND Books.ISBN=inCart.ISBN AND userid = ? AND books.method=delivery.method;";
 
     $stmt = $mydb->prepare($query);
     $stmt->bind_param('i', $_SESSION['id']);
@@ -209,6 +211,10 @@
         echo "<p>Your Shopping Cart is Still Empty</p>";
         echo "<br>";
     } else {
+      $total = 0; # total price of the shopping cart (books)
+      $time = 0;
+      $cost = 0;
+
       echo "<table>
       <thead>
       <tr>
@@ -216,6 +222,7 @@
       <th>ISBN</th>
       <th>Quantity</th>
       <th>Type</th>
+      <th>Total Price</th>
       <th></th>
       </tr>
       </thead>";
@@ -227,13 +234,23 @@
           echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
           echo "<td>&emsp;".$row['quantity']."&emsp;</td>";
           echo "<td>&emsp;".$row['type']."&emsp;</td>";
+          echo "<td>&emsp;".$row['total price']."&emsp;</td>";
           echo '<td><form action="" method="post">';
           echo '<button type="submit" name="delete" value="'.$row['ISBN'].'">Delete</button>';
           echo '</form></td>';
           echo "</tr>";
+
+          $total += $row['total price'];
+          $time = max($time, $row['time']);
+          $cost = max($cost, $row['cost']);
       }
       echo "</tbody>";
       echo "</table>";
+
+      echo "<br>";
+      echo "<p><b>Total Price(books): </b>$<u>$total</u></p>";
+      echo "<p><b>Total Estimate Deliver time: </b><u>$time</u> days</p>";
+      echo "<p><b>Total Delivery Fee: </b>$<u>$cost</u></p>";
     }
 
     // display Bought message
@@ -241,7 +258,7 @@
         echo "<h2>Bought!</h2>";
     }
     ?>
-    <br><br>
+    <br>
 
     <!-- Purchase -->
     <h2>Payment Method</h2>
