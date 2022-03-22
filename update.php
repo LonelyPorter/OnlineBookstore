@@ -117,7 +117,7 @@ Update delivery method price
       // table body
       echo "<tbody>";
       while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-        $status = array('pending'=>'pending', 'processing'=>'processing', 'finished'=>'finished');
+        $status = array('processing'=>'processing', 'finished'=>'finished');
         echo "<tr>";
         echo '<form action="" method="post">';
         echo "<td>&emsp;".$row['Number']."&emsp;</td>";
@@ -129,10 +129,15 @@ Update delivery method price
         // status
         echo '<td>';
         echo '<select name="status[]">';
-        echo '<option selected>'.$status[$row['status']].'</option>';
-        unset($status[$row['status']]);
-        foreach ($status as $s) {
-          echo '<option value="'.$s.'">'.$s.'</option>';
+        if ($row['status'] == 'pending') {
+          // Cannot update pending because it's user's own shopping cart
+          echo '<option value="pending" selected>----</option>';
+        } else { // finished <=> processing
+          echo '<option selected>'.$status[$row['status']].'</option>';
+          unset($status[$row['status']]);
+          foreach ($status as $s) {
+            echo '<option value="'.$s.'">'.$s.'</option>';
+          }
         }
         echo '</select>';
         echo '</td>';
@@ -143,8 +148,9 @@ Update delivery method price
       echo "</tbody>";
       echo "</table>";
      ?>
+     <br>
+     <p>*You cannot change the pending status as they're individual's shopping cart order.</p>
      <button type="submit" name="orders">Update</button>
-     <br><br>
 
     <?php
       $mydb->close();
