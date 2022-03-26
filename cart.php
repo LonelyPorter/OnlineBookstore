@@ -149,7 +149,7 @@
 
               // if the quantity to buy > the stock number
               // throw an exception
-              if ($row['in_stock'] != -99 && $row['quantity'] > $row['in_stock']) {
+              if ($row['in_stock'] > 0 && $row['quantity'] > $row['in_stock']) {
                 throw new Exception('Not enough books in stock: ISBN='.$row['ISBN']);
               }
 

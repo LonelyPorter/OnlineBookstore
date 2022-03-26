@@ -26,7 +26,8 @@
      $mydb = new mysqli('localhost', 'root', '', 'bookstore');
      $query = "SELECT orderNumber, title, inOrder.ISBN, quantity, status, time, price * quantity as total
                FROM inorder, `order`, books
-               WHERE orderNumber = Number AND userID = ? AND inorder.ISBN = books.ISBN;";
+               WHERE orderNumber = Number AND userID = ? AND inorder.ISBN = books.ISBN
+               ORDER BY time ASC;";
 
      $stmt = $mydb->prepare($query);
      $stmt->bind_param('i', $_SESSION['id']);

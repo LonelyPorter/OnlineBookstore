@@ -89,10 +89,10 @@ create table Books (
 
 INSERT INTO `books` (`ISBN`, `title`, `type`, `price`, `Category`, `in_stock`, `pName`, `method`) VALUES
 ('9780134763644', 'Calculus', 'hardcover', 109.55, 'Mathematics', 15, 'Pearson', 'hardcover'),
-('9780593230572', 'The 1619 Project: A New Origin Story', 'audio', 30.63, 'History', -99, 'Hanging Loose Press', 'email'),
-('9780735211292', 'Atomic Habits: An Easy & Proven Way to Build Good ', 'eletronic', 19.99, 'Social Psychology', -99, 'Graywolf Press', 'email'),
+('9780593230572', 'The 1619 Project: A New Origin Story', 'audio', 30.63, 'History', -1, 'Hanging Loose Press', 'email'),
+('9780735211292', 'Atomic Habits: An Easy & Proven Way to Build Good ', 'eletronic', 19.99, 'Social Psychology', -1, 'Graywolf Press', 'email'),
 ('9780735219106', 'Where the Crawdads Sing', 'paperback', 9.98, 'Genre Fiction', 8, 'Dzanc Books', 'paperback'),
-('9781284194531', 'Ugly\'s Electrical References, 2020 Edition', 'eletronic', 13.58, 'Engineering', -99, 'Akashic Books', 'email'),
+('9781284194531', 'Ugly\'s Electrical References, 2020 Edition', 'eletronic', 13.58, 'Engineering', -1, 'Akashic Books', 'email'),
 ('9781370873487', 'The Saints of Swallow Hill: A Fascinating Depressi', 'hardcover', 45.5, 'Friction', 9, 'McSweeney\'s', 'hardcover'),
 ('9781454891536', 'Property (Examples & Explanations)', 'paperback', 59.99, 'Business', 12, 'Graywolf Press', 'paperback'),
 ('9781589255517', 'I Love You to the Moon and Back', 'hardcover', 29.99, 'Novel', 2, 'Dzanc Books', 'hardcover'),
