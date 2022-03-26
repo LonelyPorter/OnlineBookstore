@@ -129,17 +129,22 @@
       echo "<td>&emsp;".$row['name']."&emsp;</td>";
       if ($row['in_stock'] >= 0) {
           echo "<td>&emsp;".$row['in_stock']."&emsp;</td>";
-      } else {
+      } else{
           echo "<td>&emsp;&infin;&emsp;</td>";
       }
       echo "<td>&emsp;".$row['pName']."&emsp;</td>";
       echo "<td>&emsp;".$row['method']."&emsp;</td>";
       echo "<td>";
       echo '<div style="display: flex;">';
-      echo '<form action="cart.php" method="post">';
-      echo '<button type="submit" name="ISBN" value="' .$row['ISBN']. '">add to cart</button>';
-      echo '</form>';
-      echo '&emsp;';
+      if ($row['in_stock'] > 0 || $row['in_stock'] == -99) {
+        echo '<form action="cart.php" method="post">';
+        echo '<button type="submit" name="ISBN" value="' .$row['ISBN']. '">add to cart</button>';
+        echo '</form>';
+        echo '&emsp;';
+      } else {
+        echo 'empty stock';
+        echo '&emsp;';
+      }
       echo '<form action="book.php" method="get">';
       echo '<button type="submit" name="book" value="'.$row['ISBN'].'">Detail</button>';
       echo '</form>';
@@ -170,7 +175,7 @@
           GROUP BY ISBN
           HAVING quantity =
           (SELECT MAX(quantity) FROM
-          (SELECT ISBN, sum(quantity) AS quantity 
+          (SELECT ISBN, sum(quantity) AS quantity
           FROM inorder, `order` WHERE inorder.orderNumber = `order`.`Number`
           AND EXTRACT(year from `time`) LIKE ? AND status!='pending' GROUP BY ISBN) AS T)) AS T1, books, Customers, `write`
           WHERE T1.ISBN = books.ISBN AND books.ISBN = `write`.ISBN AND customers.userID = `write`.userID;";

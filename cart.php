@@ -18,7 +18,7 @@
       return $orderNumber;
   }
  ?>
- 
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -42,7 +42,7 @@
         echo "<br><br>";
     }
 
-    // insert book into incart (after hitting order/reorder button)
+    // insert book into incart (after hitting "add to cart"/"reorder" button)
     if (!empty($_POST['ISBN'])) {
         $isbn = $_POST['ISBN'];
         $time = date("Y-m-d");
@@ -122,11 +122,17 @@
         $stmt->fetch();
         $stmt->close();
 
+        /* Start transaction */
+        $mydb->begin_transaction();
+
         // if address exists
         if (!empty($address)) {
+          try {
             // Add to inOrder and update stock in Books
-            $query = "SELECT incart.ISBN, shoppingcart.orderNumber, incart.quantity FROM incart, shoppingcart
-                WHERE incart.cartID=shoppingcart.ID and incart.cartOrder=shoppingcart.orderNumber and userid=?;";
+            $query = "SELECT incart.ISBN, shoppingcart.orderNumber, incart.quantity, in_stock
+              FROM incart, shoppingcart, books
+              WHERE incart.cartID=shoppingcart.ID AND incart.cartOrder=shoppingcart.orderNumber
+              AND userid= ? AND incart.ISBN = books.ISBN;";
             $stmt = $mydb->prepare($query);
             $stmt->bind_param('i', $_SESSION['id']);
             $stmt->execute();
@@ -135,11 +141,17 @@
             while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
               // Add to Order
               $q = "INSERT INTO inOrder(ISBN, orderNumber, quantity)
-                VALUES(?, ?, ?);";
+              VALUES(?, ?, ?);";
               $s = $mydb->prepare($q);
               $s->bind_param('ssi', $row['ISBN'], $row['orderNumber'], $row['quantity']);
               $s->execute();
               $s->close();
+
+              // if the quantity to buy > the stock number
+              // throw an exception
+              if ($row['in_stock'] != -99 && $row['quantity'] > $row['in_stock']) {
+                throw new Exception('Not enough books in stock: ISBN='.$row['ISBN']);
+              }
 
               // Update in_stock in Books
               $q = "UPDATE Books SET in_stock = in_stock - ? WHERE ISBN = ?;";
@@ -151,8 +163,8 @@
 
             // delete inCart
             $query = "DELETE FROM incart WHERE cartOrder in
-                  (SELECT cartOrder FROM incart, shoppingcart
-                  WHERE incart.cartOrder=shoppingcart.orderNumber and userID=?);";
+              (SELECT cartOrder FROM incart, shoppingcart
+              WHERE incart.cartOrder=shoppingcart.orderNumber and userID=?);";
             $stmt = $mydb->prepare($query);
             $stmt->bind_param('i', $_SESSION['id']);
             $stmt->execute();
@@ -169,6 +181,14 @@
             $stmt = $mydb->prepare($query);
             $stmt->bind_param('i', $_SESSION['id']);
             $stmt->execute();
+
+            $mydb->commit();
+          } catch (\Exception $e) { // not enough in stock
+            $mydb->rollback();
+            echo '<h3>';
+            echo 'Purchase Failed: ' .$e->getMessage();
+            echo '</h3>';
+          }
         } else { # if address not exists
             echo "<h3>Warning: You need to have a valid address to be able to purchase.</h3>";
         }

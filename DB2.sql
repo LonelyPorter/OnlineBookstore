@@ -89,13 +89,13 @@ create table Books (
 
 INSERT INTO `books` (`ISBN`, `title`, `type`, `price`, `Category`, `in_stock`, `pName`, `method`) VALUES
 ('9780134763644', 'Calculus', 'hardcover', 109.55, 'Mathematics', 15, 'Pearson', 'hardcover'),
-('9780593230572', 'The 1619 Project: A New Origin Story', 'audio', 30.63, 'History', -1, 'Hanging Loose Press', 'email'),
-('9780735211292', 'Atomic Habits: An Easy & Proven Way to Build Good ', 'email', 19.99, 'Social Psychology', 25, 'Graywolf Press', 'email'),
+('9780593230572', 'The 1619 Project: A New Origin Story', 'audio', 30.63, 'History', -99, 'Hanging Loose Press', 'email'),
+('9780735211292', 'Atomic Habits: An Easy & Proven Way to Build Good ', 'eletronic', 19.99, 'Social Psychology', -99, 'Graywolf Press', 'email'),
 ('9780735219106', 'Where the Crawdads Sing', 'paperback', 9.98, 'Genre Fiction', 8, 'Dzanc Books', 'paperback'),
-('9781284194531', 'Ugly\'s Electrical References, 2020 Edition', 'eletronic', 13.58, 'Engineering', -1, 'Akashic Books', 'email'),
+('9781284194531', 'Ugly\'s Electrical References, 2020 Edition', 'eletronic', 13.58, 'Engineering', -99, 'Akashic Books', 'email'),
 ('9781370873487', 'The Saints of Swallow Hill: A Fascinating Depressi', 'hardcover', 45.5, 'Friction', 9, 'McSweeney\'s', 'hardcover'),
 ('9781454891536', 'Property (Examples & Explanations)', 'paperback', 59.99, 'Business', 12, 'Graywolf Press', 'paperback'),
-('9781589255517', 'I Love You to the Moon and Back', 'hardcover', 29.99, 'Novel', 5, 'Dzanc Books', 'hardcover'),
+('9781589255517', 'I Love You to the Moon and Back', 'hardcover', 29.99, 'Novel', 2, 'Dzanc Books', 'hardcover'),
 ('9784958025933', 'Lessons From The Edge: A Memoir', 'paperback', 61.99, 'Biography', 23, 'Pearson', 'paperback'),
 ('9785829963316', 'A New Earth: Awakening to Your Life\'s Purpose', 'paperback', 13.98, 'Education', 16, 'Akashic Books', 'paperback');
 
@@ -220,13 +220,12 @@ create table Rating (
 );
 
 INSERT INTO `rating` (`Number`, `userID`, `ISBN`, `star`, `comment`, `time`) VALUES
-(6, 1001, '9780134763644', 5, 'awesome', '2022-03-15'),
-(7, 1004, '9780735219106', 3, 'not bad', '2021-03-15'),
-(5, 1008, '9780593230572', 3, 'good', '2022-03-03'),
-(4, 1009, '9780735219106', 4, 'great', '2021-02-25'),
-(3, 1009, '9781454891536', 1, 'very bad', '2021-02-20'),
 (1, 1010, '9780134763644', 5, 'excellent', '2021-01-03'),
-(2, 1010, '9781284194531', 4, 'nice', '2021-01-03');
+(2, 1010, '9781284194531', 4, 'nice', '2021-01-03'),
+(3, 1009, '9781454891536', 1, 'very bad', '2021-02-20'),
+(4, 1009, '9780735219106', 4, 'great', '2021-02-25'),
+(5, 1008, '9780593230572', 3, 'good', '2022-03-03'),
+(6, 1004, '9780735219106', 3, 'not bad', '2021-03-15');
 
 
 
