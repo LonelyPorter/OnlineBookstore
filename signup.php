@@ -1,13 +1,3 @@
-<!--
-Sample data:
-Email: ElenaMirjana@gmail.com
-password: 1016
-Name: Elena Mirjana
-Phone: 4069278421
-Address: 2663 River Road
-Status: author/member
--->
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -80,7 +70,7 @@ Status: author/member
   <center><form action="" method="post">
     <h1>Registration</h1><br>
     <input type="email" name="email" placeholder="Email" required /><br><br>
-    <input type="text" name="pwd" placeholder="Password" required><br><br>
+    <input type="text" name="pwd" placeholder="Password" required /><br><br>
     <input type="text" name="name" placeholder="Name" required /><br><br>
     <input type="text" name="phone" placeholder="Phone" required /><br><br>
     <input type="text" name="addr" placeholder="Address" required /><br><br>

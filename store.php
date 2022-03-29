@@ -13,7 +13,7 @@
   <?php
   // establish database connection
   $myconnection = mysqli_connect('localhost', 'root', '') or die('Could not connect: ' . mysql_error());
-  $mydb = mysqli_select_db($myconnection, 'bookstore') or die('Could not select database');
+  mysqli_select_db($myconnection, 'bookstore') or die('Could not select database');
 
   $email = $pwd = -1; // set non-empty so won't trigger empty login
   if (!empty($_POST['email']) && !empty($_POST['password'])) { // if coming from a form, set email and password
@@ -121,24 +121,27 @@
   echo "<tbody>";
   while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
       echo "<tr>";
-      echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
-      echo "<td>&emsp;".$row['title']."&emsp;</td>";
-      echo "<td>&emsp;".$row['type']."&emsp;</td>";
-      echo "<td>&emsp;".$row['price']."&emsp;</td>";
-      echo "<td>&emsp;".$row['Category']."&emsp;</td>";
-      echo "<td>&emsp;".$row['name']."&emsp;</td>";
+      echo "<td>&emsp;".$row['ISBN']."</td>";
+      echo "<td>&emsp;".$row['title']."</td>";
+      echo "<td>&emsp;".$row['type']."</td>";
+      echo "<td>&emsp;".$row['price']."</td>";
+      echo "<td>&emsp;".$row['Category']."</td>";
+      echo "<td>&emsp;".$row['name']."</td>";
       if ($row['in_stock'] >= 0) {
-          echo "<td>&emsp;".$row['in_stock']."&emsp;</td>";
+          echo "<td>&emsp;".$row['in_stock']."</td>";
       } else{
           echo "<td>&emsp;&infin;&emsp;</td>";
       }
-      echo "<td>&emsp;".$row['pName']."&emsp;</td>";
+      echo "<td>&emsp;".$row['pName']."</td>";
       echo "<td>&emsp;".$row['method']."&emsp;</td>";
       echo "<td>";
       echo '<div style="display: flex;">';
-      if ($row['in_stock'] > 0 || $row['in_stock'] == -99) {
+      if ($row['in_stock'] != 0) {
         echo '<form action="cart.php" method="post">';
+        echo '<div style="display: flex;">';
+        echo '<input type="number" name="quantity" min=1 value=1 style="width: 3em;">';
         echo '<button type="submit" name="ISBN" value="' .$row['ISBN']. '">add to cart</button>';
+        echo '</div>';
         echo '</form>';
         echo '&emsp;';
       } else {

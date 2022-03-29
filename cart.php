@@ -48,6 +48,7 @@
         $time = date("Y-m-d");
         $order = generateOrder();
         $id = $_SESSION['id'];
+        $quantity = $_POST['quantity'];
 
         // check if there's exsisting shopping cart
         $query = "SELECT ID, orderNumber FROM ShoppingCart WHERE userID = ?;";
@@ -79,9 +80,9 @@
             // insert incart
             $last_id = mysqli_insert_id($mydb);
             $query = "INSERT INTO `InCart` (`ISBN`, `cartID`, `cartOrder`, `quantity`)
-                  VALUES (?, ?, ?, 1);";
+                  VALUES (?, ?, ?, ?);";
             $stmt = $mydb->prepare($query);
-            $stmt->bind_param('sis', $isbn, $last_id, $order);
+            $stmt->bind_param('sisi', $isbn, $last_id, $order, $quantity);
             $stmt->execute();
 
             /* If code reaches this point without errors then commit the data in the database */
@@ -93,19 +94,19 @@
         try {
             // insert incart
             $query = "INSERT INTO `InCart` (`ISBN`, `cartID`, `cartOrder`, `quantity`)
-                  VALUES (?, ?, ?, 1);";
+                  VALUES (?, ?, ?, ?);";
             $stmt = $mydb->prepare($query);
-            $stmt->bind_param('sis', $isbn, $cartID, $order);
+            $stmt->bind_param('sisi', $isbn, $cartID, $order, $quantity);
             $stmt->execute();
 
             $mydb->commit();
         } catch (\Exception $e) { // if insert fail, update quantity
             $mydb->rollback();
 
-            $query = "UPDATE inCart SET quantity = quantity + 1
+            $query = "UPDATE inCart SET quantity = quantity + ?
                   WHERE ISBN = ? AND cartID = ? AND cartOrder = ?";
             $stmt = $mydb->prepare($query);
-            $stmt->bind_param('sis', $isbn, $cartID, $order);
+            $stmt->bind_param('isis', $quantity, $isbn, $cartID, $order);
             $stmt->execute();
         }
     }
@@ -269,6 +270,23 @@
 
       echo "<br>";
       echo "<p><b>Total Price(books): </b>$<u>$total</u></p>";
+
+      // Check if customer is prime
+      $q = "SELECT * FROM Member WHERE userID = ? AND prime = 1
+          UNION SELECT *  FROM Author WHERE userID = ? AND prime = 1;";
+      $s = $mydb->prepare($q);
+      $s->bind_param('ii', $_SESSION['id'], $_SESSION['id']);
+      $s->execute();
+      $r = $s->get_result();
+
+      if (mysqli_num_rows($r) != 0) {
+        $time = 2;
+        $cost = 0;
+      }
+
+      $r->free();
+      $s->close();
+
       echo "<p><b>Total Estimate Deliver time: </b><u>$time</u> days</p>";
       echo "<p><b>Total Delivery Fee: </b>$<u>$cost</u></p>";
     }

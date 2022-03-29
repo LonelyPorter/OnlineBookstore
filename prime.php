@@ -65,8 +65,7 @@
 
      if (mysqli_num_rows($result) == 0) {
        // Empty result = Must be a Guest
-       echo "<p>Guest cannot enroll in Prime MemberShip</p>";
-       echo "<br><br>";
+       echo "<p>*Guest cannot enroll in Prime MemberShip</p>";
      } else { // otherwise, it's customer/author
        echo "<table>
               <thead>
@@ -91,17 +90,107 @@
        echo "</tbody>";
        echo "</table>";
      }
-
      $stmt->close();
     ?>
-      <form action="" method="post">
-        <input type="radio" name="prime" value="False">
-        <label>Non-Prime</label>
-        <input type="radio" name="prime" value="True">
-        <label>Prime</label><br><br>
-        <input type="submit" name="submit" value="Update">
-        <input type="reset" name="reset" value="Reset">
-      </form><br>
+
+    <!-- Payment Fee -->
+    <p>Payment Fee: <b>$25</b></p>
+
+    <!-- Purchase -->
+    <h2>Payment Method</h2>
+    <?php
+      if (!empty($_POST['add'])) {
+          /* Add new payment if submit form add */
+          $id = $_SESSION['id'];
+          $account = $_POST['account'];
+          $exp = $_POST['expire'];
+          $cvs = $_POST['cvs'];
+
+          $mydb->begin_transaction();
+          try {
+              $query = "INSERT INTO Payment(userID, Account, expire, cvs)
+          VALUES(?, ?, ?, ?);";
+              $stmt = $mydb->prepare($query);
+              $stmt->bind_param('issi', $id, $account, $exp, $cvs);
+              $stmt->execute();
+
+              $mydb->commit();
+          } catch (\Exception $e) {
+              $mydb->rollback();
+              echo "Add payment method failed. Please Contact administrator!";
+          }
+      }
+
+      /* Query for searching user payment */
+      $query = "SELECT * FROM payment WHERE userID = ?;";
+      $stmt = $mydb->prepare($query);
+      $stmt->bind_param('i', $_SESSION['id']);
+      $stmt->execute();
+      $result = $stmt->get_result();
+
+      if (mysqli_num_rows($result) == 0) {
+          echo "<h3>[You do not have any payment method on record]</h3>";
+          echo "<h3>*You need to have at least one payment method pay for the membership fee.</h3>";
+      } else {
+          // table title
+          echo "<table>
+        <thead>
+        <tr>
+        <th>Account</th>
+        <th>Expire</th>
+        <th></th>
+        </tr>
+        </thead>";
+
+        // table body
+        echo "<tbody>";
+        echo '<form action="" method="post">';
+        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+            echo "<tr>";
+            echo "<td>&emsp;".$row['Account']."&emsp;</td>";
+            echo "<td>".$row['expire']."</td>";
+            echo '<td>&emsp;<input type="radio" name="payment" value="'.$row['Account'].'" required/></td>';
+            echo "</tr>";
+        }
+        echo "</tbody></table>";
+        echo "<br>";
+
+        // Update Button
+        echo '<form action="" method="post">
+                <input type="radio" name="prime" value="False" required/>
+                <label>Unenroll</label>
+                <input type="radio" name="prime" value="True" required/>
+                <label>Enroll</label><br><br>
+                <input type="submit" name="submit" value="Update">
+                <input type="reset" name="reset" value="Reset">
+              </form><br>';
+      }
+     ?>
+
+      <!-- Add Payment Method -->
+      <h4>Add new payment method:</h4>
+      <form class="" action="" method="post">
+        <!-- Account -->
+        <div class="">
+          <label>Account: </label>
+          <input type="text" name="account" required/>
+          <br><br>
+        </div>
+        <!-- Expire Date-->
+        <div class="">
+          <label>Expire: </label>
+          <input type="text" name="expire" required/>
+          <br><br>
+        </div>
+        <!-- CVS -->
+        <div class="">
+          <label>CVS: </label>
+          <input type="text" name="cvs" required/>
+          <br><br>
+        </div>
+        <input type="submit" name="add" value="Submit">
+        <input type="reset" value="Reset">
+      </form>
 
    </body>
  </html>
