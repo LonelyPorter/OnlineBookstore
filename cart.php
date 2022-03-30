@@ -48,8 +48,11 @@
         $time = date("Y-m-d");
         $order = generateOrder();
         $id = $_SESSION['id'];
-        $quantity = $_POST['quantity'];
-
+        $quantity = 1;
+        # if the add cart support choosing how many books to add
+        if(isset($_POST['quantity'])) {
+          $quantity = $_POST['quantity'];
+        }
         // check if there's exsisting shopping cart
         $query = "SELECT ID, orderNumber FROM ShoppingCart WHERE userID = ?;";
         $stmt = $mydb->prepare($query);
@@ -150,7 +153,7 @@
 
               // if the quantity to buy > the stock number
               // throw an exception
-              if ($row['in_stock'] > 0 && $row['quantity'] > $row['in_stock']) {
+              if ($row['in_stock'] >= 0 && $row['quantity'] > $row['in_stock']) {
                 throw new Exception('Not enough books in stock: ISBN='.$row['ISBN']);
               }
 

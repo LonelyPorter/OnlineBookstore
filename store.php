@@ -145,8 +145,8 @@
         echo '</form>';
         echo '&emsp;';
       } else {
-        echo 'empty stock';
-        echo '&emsp;';
+        echo 'Out of Stock';
+        echo '&emsp;&emsp;&emsp;&emsp;';
       }
       echo '<form action="book.php" method="get">';
       echo '<button type="submit" name="book" value="'.$row['ISBN'].'">Detail</button>';

@@ -36,6 +36,7 @@
         // begin connection
         $mydb = new mysqli('localhost', 'root', '', 'bookstore');
 
+        /* Find all the author name */
         $query = "SELECT author.userID, name FROM customers, author WHERE customers.userID = author.userID;";
         $stmt = $mydb->prepare($query);
         $stmt->execute();
@@ -43,7 +44,6 @@
         echo '<select name="author">';
         echo '<option disabled selected> -- Choose an Author -- </option>';
         while ($row = mysqli_fetch_array($result, MYSQLI_BOTH)) {
-          // value = userID
           echo '<option value="' . $row['userID'].'">'. $row['name'].'</option>';
         }
         echo '<option value="%">Any</option>';
@@ -51,9 +51,9 @@
         $result->free();
        ?>
 
-       <!-- Button -->
-       <input type="submit" name="submit" value="Search">
-       <input type="reset" value="Reset"><br><br>
+     <!-- Button -->
+     <input type="submit" name="submit" value="Search">
+     <input type="reset" value="Reset"><br><br>
     </form>
 
     <?php
@@ -104,21 +104,32 @@
         while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
           echo '<form action="cart.php" method="post">';
           echo "<tr>";
-          echo "<td>&emsp;".$row['ISBN']."&emsp;</td>";
-          echo "<td>&emsp;".$row['title']."&emsp;</td>";
-          echo "<td>&emsp;".$row['type']."&emsp;</td>";
-          echo "<td>&emsp;".$row['price']."&emsp;</td>";
-          echo "<td>&emsp;".$row['Category']."&emsp;</td>";
-          echo "<td>&emsp;".$row['name']."&emsp;</td>";
+          echo "<td>&emsp;".$row['ISBN']."</td>";
+          echo "<td>&emsp;".$row['title']."</td>";
+          echo "<td>&emsp;".$row['type']."</td>";
+          echo "<td>&emsp;".$row['price']."</td>";
+          echo "<td>&emsp;".$row['Category']."</td>";
+          echo "<td>&emsp;".$row['name']."</td>";
           if ($row['in_stock'] >= 0) {
-            echo "<td>&emsp;".$row['in_stock']."&emsp;</td>";
+            echo "<td>&emsp;".$row['in_stock']."</td>";
           } else {
-            echo "<td>&emsp;&infin;&emsp;</td>";
+            echo "<td>&emsp;&infin;</td>";
           }
-          echo "<td>&emsp;".$row['pName']."&emsp;</td>";
-          echo "<td>&emsp;".$row['method']."&emsp;</td>";
+          echo "<td>&emsp;".$row['pName']."</td>";
+          echo "<td>&emsp;".$row['method']."</td>";
           echo "<td>";
-          echo '<button type="submit" name="ISBN" value="' .$row['ISBN']. '">add to cart</button>';
+          // echo '<button type="submit" name="ISBN" value="' .$row['ISBN']. '">add to cart</button>';
+          if ($row['in_stock'] != 0) {
+            echo '<form action="cart.php" method="post">';
+            echo '<div style="display: flex;">';
+            echo '<input type="number" name="quantity" min=1 value=1 style="width: 3em;">';
+            echo '<button type="submit" name="ISBN" value="' .$row['ISBN']. '">add to cart</button>';
+            echo '</div>';
+            echo '</form>';
+          } else {
+            echo 'Out of Stock';
+            echo '&emsp;&emsp;&emsp;&emsp;';
+          }
           echo '</td>';
           echo "</tr>";
           echo '</form>';
