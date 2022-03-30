@@ -26,6 +26,9 @@
 
     <!-- Search Field -->
     <form class="" action="" method="post">
+      <!-- ISBN -->
+      <label for="ISBN">ISBN: </label>
+      <input type="text" name="ISBN">
       <!-- Title -->
       <label>Title: </label>
       <input type="text" name="title">
@@ -57,25 +60,27 @@
     </form>
 
     <?php
-
-
       /* Initialize */
       $title = "%";
       $author = "%";
+      $ISBN = "%";
       if(!empty($_POST['title'])) {
         $title = '%'.$_POST['title'].'%';
       }
       if(!empty($_POST['author'])) {
         $author = $_POST['author'];
       }
+      if(!empty($_POST['ISBN'])) {
+        $ISBN = '%'.$_POST['ISBN'].'%';
+      }
 
       /* Search book by title/author query */
       $query = "SELECT books.ISBN, title, type, price, Category, in_stock, pName, method, name
                 FROM books, `write`, customers
                 WHERE books.ISBN = `write`.ISBN AND customers.userID = `write`.userID
-                  AND title LIKE ? AND `write`.userID LIKE ?;";
+                  AND title LIKE ? AND `write`.userID LIKE ? AND books.ISBN LIKE ?;";
       $stmt = $mydb->prepare($query);
-      $stmt->bind_param('ss', $title, $author);
+      $stmt->bind_param('sss', $title, $author, $ISBN);
       $stmt->execute();
       $result = $stmt->get_result();
 
