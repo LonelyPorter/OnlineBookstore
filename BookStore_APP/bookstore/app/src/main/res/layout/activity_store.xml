@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relativelayout_store_page"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="40dp"
+    android:background="@color/white">
+
+    <Button
+        android:id="@+id/storeSearch_btn"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:onClick="storeSearchOnclick"
+        android:text="Search"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/storeOrder_btn"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="135dp"
+        android:onClick="storeOrderOnclick"
+        android:text="Order"
+        android:textSize="18sp" />
+
+    <ImageButton
+        android:id="@+id/profile_btn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="80dp"
+        android:background="@null"
+        app:srcCompat="@drawable/profile_48dp" />
+
+    <ImageButton
+        android:id="@+id/cart_btn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="25dp"
+        android:background="@null"
+        android:contentDescription="shopping cart"
+        app:srcCompat="@drawable/cart_48dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/storeOrder_btn"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/search_page_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableLayout
+                android:id="@+id/storeTable"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TableRow
+                    android:id="@+id/storeTable_row1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/storeISBN"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:fontFamily="serif"
+                        android:gravity="center_horizontal"
+                        android:text="ISBN" />
+
+                    <TextView
+                        android:id="@+id/storeTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:fontFamily="serif"
+                        android:gravity="center_horizontal"
+                        android:text="Title" />
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativelayout_profile_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerVertical="true">
+
+    <RadioGroup
+        android:id="@+id/primeRadio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="50dp"
+        android:checkedButton="@id/prime_btn"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/prime_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:onClick="onPrimeClicked"
+            android:text="Prime" />
+
+        <RadioButton
+            android:id="@+id/nonPrime_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:onClick="onPrimeClicked"
+            android:text="Non Prime" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/update_btn"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/primeRadio"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="50dp"
+        android:onClick="primeOnclick"
+        android:text="Update"
+        android:textSize="18sp" />
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/update_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp">
+
+        <TextView
+            android:id="@+id/textView_infoTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:text="Personal Information"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="26dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView_primeStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView_infoTitle"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:hint="Prime"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textView_profileName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView_primeStatus"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:hint="Name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textView_profileEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView_profileName"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:hint="Email"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textView_profilePhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView_profileEmail"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:hint="Phone"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textView_profileAddr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView_profilePhone"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:hint="Address"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="20dp" />
+
+    </RelativeLayout>
+</RelativeLayout>

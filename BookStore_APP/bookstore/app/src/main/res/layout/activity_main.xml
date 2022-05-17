@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativelayout_main_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView_bookstore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:text="Bookstore"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="40dp" />
+
+    <TextView
+        android:id="@+id/textView_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editText_email"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="30dp"
+        android:text="Email"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="24dp" />
+
+    <TextView
+        android:id="@+id/textView_pwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/editText_pwd"
+        android:layout_alignBottom="@+id/editText_pwd"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="30dp"
+        android:text="Password"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="24dp" />
+
+    <EditText
+        android:id="@+id/editText_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="160dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="25dp"
+        android:ems="10"
+        android:hint="email"
+        android:minHeight="48dp">
+
+        <requestFocus android:layout_width="wrap_content" />
+    </EditText>
+
+    <EditText
+        android:id="@+id/editText_pwd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText_email"
+        android:layout_alignRight="@+id/editText_email"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"></EditText>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/textView_pwd"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/login_btn"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="loginOnclick"
+            android:text="Login"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/guest_btn"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:text="Guest"
+            android:textSize="20sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="120dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/signup_btn"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
+                android:text="Signup"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/publisher_btn"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center"
+                android:layout_marginRight="30dp"
+                android:text="Publisher"
+                android:textSize="12sp" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

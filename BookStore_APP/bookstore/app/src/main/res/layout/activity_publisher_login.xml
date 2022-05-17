@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativelayout_publisher_login_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView_publisherLoginName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editText_publisherLoginName"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="30dp"
+        android:text="Name:"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="24dp" />
+
+
+    <EditText
+        android:id="@+id/editText_publisherLoginName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="25dp"
+        android:ems="10"
+        android:hint="publisher name"
+        android:minHeight="48dp">
+
+        <requestFocus android:layout_width="wrap_content" />
+
+    </EditText>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/textView_publisherLoginName"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/publisherLogin_btn"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="publisherLoginOnclick"
+            android:text="Login"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+</RelativeLayout>
