@@ -10,7 +10,7 @@ First, design a bookstore database. Then build webpages on top of the database u
 ### How to run
 * Run Xampp after download
  * start `Apache`, `MySQL`
- * put the entire folder `DB2` under `htdocs` inside the `xampp` root folder
+ * put the entire folder `DB2`(the current folder) under `htdocs` inside the `xampp` root folder
 * In the shell (from Xampp) run: ```mysql -u root bookstore < DB2.sql```  
 * Type the URL in the browser [localhost/DB2](localhost/DB2)
 
@@ -139,9 +139,9 @@ Test Example:
    - Finished
    - Processing
    - Pending (cannot for now because it's individual's shopping cart)
-4. Customers can change their information (password, name, email, phone number and address) by clicking the `My Info` button on the store page. (Guest will not be able to change their password)
-5. Customer can add new payment method when purchasing books. Customers will need at least one payment method to be able to purchase.
-6. Customers can view the best rating book of a given year by entering a year inside `View Rating`; if no year is given, the best rating book of all time will be displayed.
-7. Customers can add different books and add more than one book into shopping cart. Customers can delete the entry(books) from shopping cart. In-stock number will change accordingly after customers purchase that particular book. Customers cannot buy books that is out-of-stock.
-8. Shopping Cart will show the total price, delivery fee and time
+4. Customers(including guest) can change their information (password, name, email, phone number and address) by clicking the `My Info` button on the store page. (*Guest will not be able to change their password)
+5. Customers(including guest) can add new payment method when purchasing books. Customers will need at least one payment method to be able to purchase.
+6. Customers(including guest) can view the best rating book of a given year by entering a year inside `View Rating`; if no year is given, the best rating book of all time will be displayed.
+7. Customers(including guest) can add different books and more than one quantity at a time into shopping cart. Customers can delete the entry(books) from shopping cart. In-stock number will change accordingly after customers place the order. Customers cannot buy books that are out-of-stock.
+8. Shopping Cart will show the total price, delivery fee and time. Order history will display the total price of all items from the same order.
 9. Customers can search by ISBN as well

@@ -19,6 +19,7 @@ drop table if exists ShoppingCart;
 drop table if exists InCart;
 
 SET FOREIGN_KEY_CHECKS=1;
+
 -- Create table
 create table Publisher (
   name varchar(20) primary key,
