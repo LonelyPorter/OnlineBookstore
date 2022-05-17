@@ -207,9 +207,11 @@
         $mydb->begin_transaction();
         try {
             // First, remove from incart
-            $query = "DELETE FROM inCart WHERE ISBN = ?;";
+            $query = "DELETE FROM `incart` WHERE ISBN = ? and cartOrder =
+              (SELECT DISTINCT cartOrder FROM `incart`, `shoppingcart`
+              WHERE cartOrder = orderNumber AND userid = ?);";
             $stmt = $mydb->prepare($query);
-            $stmt->bind_param('s', $isbn);
+            $stmt->bind_param('si', $isbn, $_SESSION['id']);
             $stmt->execute();
 
             $mydb->commit();
